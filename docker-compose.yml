@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+    minio:
+        image: bitnami/minio:latest
+        container_name: minio
+        ports:
+            - "9000:9000"
+            - "9001:9001"
+        environment:
+            MINIO_ROOT_USER: tokenrtvr
+            MINIO_ROOT_PASSWORD: development-tokenrtvr
+        command: server /bitnami/minio/data --console-address ":9001"
+        volumes:
+            - minio_data:/bitnami/minio/data
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+
+    mongo:
+        image: mongo:latest
+        container_name: mongo
+        ports:
+            - "27017:27017"
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: tokenrtvr
+            MONGO_INITDB_ROOT_PASSWORD: development-tokenrtvr
+        volumes:
+            - mongo_data:/data/db
+        healthcheck:
+            test: ["CMD", "mongosh", "--username", "tokenrtvr", "--password", "development-tokenrtvr", "--authenticationDatabase", "admin", "--eval", "db.adminCommand('ping')"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+
+volumes:
+    minio_data:
+    mongo_data:
