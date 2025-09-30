@@ -1,8 +1,6 @@
-from typing import Any
-from domain.conversa import Conversa
-from ports.repositories.conversa_repository import ConversaRepository
+from ports.repositories.session_repository import ISessionRepository
 
 
-class InMemoryConversaRepository(ConversaRepository):
-    async def get(self, **filters: Any) -> Conversa | None:
+class InMemorySessionRepository(ISessionRepository):
+    def get_session(self, session_id: int):
         pass
