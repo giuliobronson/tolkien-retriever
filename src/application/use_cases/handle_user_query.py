@@ -8,7 +8,7 @@ class HandleUserQuery:
         self.session_repository = session_repository
 
     def execute(self, session_id: int, user_message: str) -> str:
-        session = self.session_repository.get_session(session_id)
+        session = self.session_repository.get_by_id(session_id)
         response = self.agent.respond(user_message, session.messages)
         session.messages.append(response)
         self.session_repository.save_session(session)

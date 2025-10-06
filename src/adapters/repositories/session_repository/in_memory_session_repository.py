@@ -2,5 +2,8 @@ from ports.repositories.session_repository import ISessionRepository
 
 
 class InMemorySessionRepository(ISessionRepository):
-    def get_session(self, session_id: int):
-        pass
+    def __init__(self):
+        self.db = {}
+
+    def get_by_id(self, session_id: int):
+        return self.db[session_id]
