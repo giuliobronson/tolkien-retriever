@@ -1,4 +1,4 @@
-from ports.repositories.session_repository import ISessionRepository
+from core.application.ports.repositories.session_repository import ISessionRepository
 
 
 class InMemorySessionRepository(ISessionRepository):
