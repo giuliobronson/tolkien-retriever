@@ -1,7 +1,6 @@
-from abc import ABC, abstractmethod
+from core.application.ports.repositories.repository_port import RepositoryPort
+from core.domain.entities.session import Session
 
 
-class ISessionRepository(ABC):
-    @abstractmethod
-    def get_by_id(self, session_id: int):
-        pass
+class ISessionRepository(RepositoryPort[Session]):
+    pass

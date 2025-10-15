@@ -5,5 +5,5 @@ class InMemorySessionRepository(ISessionRepository):
     def __init__(self):
         self.db = {}
 
-    def get_by_id(self, session_id: int):
-        return self.db[session_id]
+    def find_by_id(self, id: int):
+        return self.db[id]
