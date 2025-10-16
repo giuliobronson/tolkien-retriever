@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
 
 from adapters.api.dto.message_dto import MessageDTO
 from adapters.mappers.message_mapper import MessageMapper
-from api.dependencies import get_message_service, get_session_service
+from adapters.ws.dependencies import get_message_service, get_session_service
 from core.application.services.session_service import SessionService
 
 

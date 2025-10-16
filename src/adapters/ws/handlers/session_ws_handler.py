@@ -8,7 +8,7 @@ class SessionWebSocketHandler:
         
     async def handle(self, websocket: WebSocket, session_id: int):
         await websocket.accept()
-        session = await self.session_service.open_session()
+        session = await self.session_service.open_session(session_id)
         try:
             while True:
                 data = await websocket.receive_text()
