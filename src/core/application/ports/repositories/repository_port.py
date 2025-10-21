@@ -2,14 +2,15 @@ from abc import ABC, abstractmethod
 from typing import Generic, List, Optional, TypeVar
 
 T = TypeVar("T")
+I = TypeVar("I")
 
-class RepositoryPort(ABC, Generic[T]):
+class RepositoryPort(ABC, Generic[T, I]):
     @abstractmethod
     async def save(self, entity: T) -> T:
         pass
     
     @abstractmethod
-    async def find_by_id(self, id: int) -> Optional[T]:
+    async def find_by_id(self, id: I) -> Optional[T]:
         pass
     
     @abstractmethod
@@ -17,5 +18,5 @@ class RepositoryPort(ABC, Generic[T]):
         pass
     
     @abstractmethod
-    async def delete(self, id: int) -> None:
+    async def delete(self, id: I) -> None:
         pass

@@ -1,8 +1,20 @@
+from dataclasses import dataclass
+from typing import List
+from uuid import uuid4
+from core.domain.entities.message import Message
 from domain.entities.user import User
 
-
+@dataclass
 class Session:
-    def __init__(self, user: User, title: str) -> None:
-        self.user = user
-        self.title = title
-        self.messages = []
+    id: str
+    title: str
+    messages: List[Message] = []
+    
+    @classmethod
+    def create(cls, title: str, message: Message):
+        return cls(
+            id=str(uuid4()),
+            title=title,
+            messages=[message]
+        )
+    

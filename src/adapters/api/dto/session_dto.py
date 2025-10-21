@@ -1,10 +1,11 @@
 from typing import List
-from application.use_cases.dto.message_dto import MessageDTO
-from application.use_cases.dto.user_dto import UserDTO
 from pydantic import BaseModel
 
+from adapters.api.dto.message_dto import MessageDTO
+from adapters.api.dto.user_dto import UserDTO
 
-class Session(BaseModel):
-    user: UserDTO
+
+class SessionDTO(BaseModel):
+    id: str
     title: str
-    messages = List[MessageDTO]
+    messages: List[MessageDTO]

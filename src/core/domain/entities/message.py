@@ -1,10 +1,10 @@
+from dataclasses import dataclass
 import datetime
 
 from domain.entities.author import Author
 
-
+@dataclass
 class Message:
-    def __init__(self, author: Author, content: str, timestamp: datetime.datetime) -> None:
-        self.author = author
-        self.content = content
-        self.timestamp = timestamp
+    author: Author
+    content: str
+    timestamp: datetime.datetime
