@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from typing import List
 from uuid import uuid4
-from core.domain.entities.message import Message
-from domain.entities.user import User
+from core.domain.value_objects.message import Message
+
 
 @dataclass
 class Session:

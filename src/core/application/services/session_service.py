@@ -1,6 +1,6 @@
 from typing import Optional
 from core.application.ports.repositories.session_repository import ISessionRepository
-from core.domain.entities.message import Message
+from core.domain.value_objects.message import Message
 from core.domain.entities.session import Session
 from core.domain.exceptions.session_not_found_error import SessionNotFoundError
 

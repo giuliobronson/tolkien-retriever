@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import datetime
 
-from domain.entities.author import Author
+from core.domain.value_objects.author import Author
 
 @dataclass
 class Message:

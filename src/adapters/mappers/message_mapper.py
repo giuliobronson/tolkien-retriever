@@ -1,6 +1,6 @@
 from adapters.api.dto.message_dto import MessageDTO
 from adapters.mappers.author_mapper import AuthorMapper
-from core.domain.entities.message import Message
+from core.domain.value_objects.message import Message
 
 
 class MessageMapper:
