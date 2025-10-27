@@ -11,11 +11,11 @@ class InMemorySessionRepository(ISessionRepository):
         self.db[entity.id] = entity
         return entity
 
-    async def find_by_id(self, id: int) -> Optional[Session]:
+    async def find_by_id(self, id: str) -> Optional[Session]:
         return self.db[id]
     
     async def find_all(self) -> List[Session]:
         return list(self.db.values())
     
-    async def delete(self, id: int) -> None:
+    async def delete(self, id: str) -> None:
         self.db.pop(id)

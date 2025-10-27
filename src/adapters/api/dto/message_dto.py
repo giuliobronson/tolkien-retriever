@@ -1,10 +1,10 @@
 import datetime
+from dataclasses import dataclass
 from pydantic import BaseModel
-
-from adapters.api.dto.author_dto import AuthorDTO
+from core.domain.value_objects.role import Role
 
 
 class MessageDTO(BaseModel):
-    author: AuthorDTO
+    role: Role
     content: str
     timestamp: datetime.datetime

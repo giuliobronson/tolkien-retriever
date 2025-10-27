@@ -20,7 +20,7 @@ async def create_session(
 
 @router.get("/{session_id}")
 async def open_session(
-    session_id: int, 
+    session_id: str, 
     session_service: SessionService=Depends(get_session_service)
 ) -> SessionDTO:
     return SessionMapper.to_dto(await session_service.open_session(session_id))

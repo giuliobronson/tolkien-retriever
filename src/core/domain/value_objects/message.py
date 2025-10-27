@@ -1,10 +1,11 @@
 from dataclasses import dataclass
 import datetime
 
-from core.domain.value_objects.author import Author
+from core.domain.value_objects.role import Role
+
 
 @dataclass
 class Message:
-    author: Author
+    role: Role
     content: str
     timestamp: datetime.datetime
