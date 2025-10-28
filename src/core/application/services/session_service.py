@@ -8,13 +8,13 @@ from core.domain.exceptions.session_not_found_error import SessionNotFoundError
 class SessionService:
     def __init__(self, session_repository: ISessionRepository) -> None:
         self.session_repository = session_repository
+    
+    async def create_session(self, message: Message) -> Session:
+        title = "Título Teste"
+        return Session.create(title, message)
         
     async def open_session(self, session_id: str):
         session: Optional[Session] = await self.session_repository.find_by_id(session_id)
         if not session:
             raise SessionNotFoundError(session_id)
         return session
-    
-    async def create_session(self, message: Message) -> Session:
-        title = "Título Teste"
-        return Session.create(title, message)

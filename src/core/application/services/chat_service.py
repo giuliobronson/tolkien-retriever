@@ -6,8 +6,7 @@ from core.domain.entities.session import Session
 
 
 class ChatService:
-    def __init__(self, session_service: SessionService, session_repository: ISessionRepository, agent: IAgent) -> None:
-        self.session_service = session_service
+    def __init__(self, session_repository: ISessionRepository, agent: IAgent) -> None:
         self.session_repository = session_repository
         self.agent = agent
         self.current_session = None
@@ -18,8 +17,6 @@ class ChatService:
         
     async def answer(self, query: Message) -> Message:
         response = await self.agent.answer(query)
-        if not self.current_session:
-            self.current_session = await self.session_service.create_session(query)
         self.current_session.messages.extend([query, response])
         await self.session_repository.save(self.current_session)
         return response
