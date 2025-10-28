@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
 
-from adapters.api.dependencies import get_session_service
+from adapters.api.dependencies import get_chat_service, get_session_service
 from adapters.api.dto.message_dto import MessageDTO
 from adapters.mappers.message_mapper import MessageMapper
 from core.application.services.chat_service import ChatService
@@ -17,7 +17,7 @@ async def handle_query(
     websocket: WebSocket, 
     session_id: str, 
     session_service: SessionService=Depends(get_session_service),
-    chat_service: ChatService=Depends()
+    chat_service: ChatService=Depends(get_chat_service)
 ):
     await websocket.accept()
     session: Session = await session_service.open_session(session_id)
