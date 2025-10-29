@@ -1,5 +1,5 @@
-from core.application.ports.repositories.repository_port import RepositoryPort
 from core.domain.entities.session import Session
+from core.ports.repositories.repository_port import RepositoryPort
 
 
 class ISessionRepository(RepositoryPort[Session, str]):

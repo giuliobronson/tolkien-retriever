@@ -2,10 +2,10 @@ from fastapi import Depends
 from adapters.llm.langgraph_agent import LangGraphAgent
 from adapters.llm.langgraph_builder import LangGraphBuilder
 from adapters.repositories.session_repository.in_memory_session_repository import InMemorySessionRepository
-from core.application.ports.llm.agent import IAgent
-from core.application.ports.repositories.session_repository import ISessionRepository
 from core.application.services.chat_service import ChatService
 from core.application.services.session_service import SessionService
+from core.ports.llm.agent import IAgent
+from core.ports.repositories.session_repository import ISessionRepository
 
 
 async def get_session_repository():

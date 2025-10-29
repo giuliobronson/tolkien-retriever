@@ -1,6 +1,6 @@
 from typing import List, Optional
-from core.application.ports.repositories.session_repository import ISessionRepository
 from core.domain.entities.session import Session
+from core.ports.repositories.session_repository import ISessionRepository
 
 
 class InMemorySessionRepository(ISessionRepository):

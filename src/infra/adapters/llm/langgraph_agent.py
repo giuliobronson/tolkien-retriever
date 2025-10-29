@@ -2,9 +2,9 @@ from typing import List
 from langgraph.graph.state import CompiledStateGraph
 
 from adapters.llm.state.chat_state import ChatState
-from adapters.mappers.message_mapper import MessageMapper
-from core.application.ports.llm.agent import IAgent
 from core.domain.value_objects.message import Message
+from core.ports.llm.agent import IAgent
+from infra.mappers.message_mapper import MessageMapper
 
 
 class LangGraphAgent(IAgent):

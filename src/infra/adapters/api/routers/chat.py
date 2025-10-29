@@ -2,11 +2,11 @@ from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
 
 from adapters.api.dependencies import get_chat_service, get_session_service
 from adapters.api.dto.message_dto import MessageDTO
-from adapters.mappers.message_mapper import MessageMapper
 from core.application.services.chat_service import ChatService
 from core.application.services.session_service import SessionService
 from core.domain.value_objects.message import Message
 from core.domain.entities.session import Session
+from infra.mappers.message_mapper import MessageMapper
 
 
 router = APIRouter(prefix="/chat", tags=["chat"])
