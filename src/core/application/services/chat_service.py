@@ -1,6 +1,6 @@
-from core.application.ports.llm.agent import IAgent
-from core.application.ports.repositories.session_repository import ISessionRepository
-from core.application.services.session_service import SessionService
+from core.domain.exceptions.no_active_session_error import NoActiveSessionError
+from core.ports.llm.agent import IAgent
+from core.ports.repositories.session_repository import ISessionRepository
 from core.domain.value_objects.message import Message
 from core.domain.entities.session import Session
 
@@ -17,6 +17,8 @@ class ChatService:
         
     async def answer(self, query: Message) -> Message:
         response = await self.agent.answer(query)
+        if not self.current_session:
+            raise NoActiveSessionError()
         self.current_session.messages.extend([query, response])
         await self.session_repository.save(self.current_session)
         return response

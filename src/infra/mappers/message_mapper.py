@@ -1,7 +1,7 @@
 from datetime import datetime
 from langchain_core.messages import BaseMessage, HumanMessage, AIMessage
 
-from adapters.api.dto.message_dto import MessageDTO
+from infra.adapters.api.dto.message_dto import MessageDTO
 from core.domain.value_objects.message import Message
 from core.domain.value_objects.role import Role
 
@@ -36,8 +36,8 @@ class MessageMapper:
     def from_langgraph(message: BaseMessage) -> Message:
         return Message(
             role= MessageMapper._map_type_to_role(message.type),
-            content=message.content,
-            timestamp=message.additional_kwargs.get('timestamp')
+            content=message.content.__str__(),
+            timestamp=message.additional_kwargs.get("timestamp")
         )
         
     @staticmethod

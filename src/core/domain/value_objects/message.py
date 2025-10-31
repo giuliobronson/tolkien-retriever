@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 import datetime
+from typing import Optional
 
 from core.domain.value_objects.role import Role
 
@@ -8,4 +9,4 @@ from core.domain.value_objects.role import Role
 class Message:
     role: Role
     content: str
-    timestamp: datetime.datetime
+    timestamp: Optional[datetime.datetime]

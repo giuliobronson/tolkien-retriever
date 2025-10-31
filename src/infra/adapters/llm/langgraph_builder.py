@@ -1,13 +1,12 @@
-from langchain.chat_models import init_chat_model
+from langchain.chat_models import BaseChatModel
 from langgraph.graph.state import START, END, StateGraph, CompiledStateGraph
 
-from adapters.llm.state.chat_state import ChatState
+from infra.adapters.llm.state.chat_state import ChatState
 
 
 class LangGraphBuilder:
-    def __init__(self) -> None:
-        self.llm = init_chat_model("gpt-4o-mini", model_provider="openai", temperature=0.0)
-
+    def __init__(self, model: BaseChatModel) -> None:
+        self.llm = model
     def generate(self, state: ChatState) -> ChatState:
         response = self.llm.invoke(state["messages"])
         state["messages"].append(response)

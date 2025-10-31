@@ -1,11 +1,14 @@
 from fastapi import Depends
-from adapters.llm.langgraph_agent import LangGraphAgent
-from adapters.llm.langgraph_builder import LangGraphBuilder
-from adapters.repositories.session_repository.in_memory_session_repository import InMemorySessionRepository
+from langchain.chat_models import init_chat_model
+
+from infra.adapters.llm.langgraph_agent import LangGraphAgent
+from infra.adapters.llm.langgraph_builder import LangGraphBuilder
+from infra.adapters.repositories.session_repository.in_memory_session_repository import InMemorySessionRepository
 from core.application.services.chat_service import ChatService
 from core.application.services.session_service import SessionService
 from core.ports.llm.agent import IAgent
 from core.ports.repositories.session_repository import ISessionRepository
+from config import OPENAI_API_KEY
 
 
 async def get_session_repository():
@@ -17,7 +20,14 @@ async def get_session_service(repository: ISessionRepository=Depends(get_session
     yield service
 
 async def get_graph_builder():
-    builder = LangGraphBuilder()
+    builder = LangGraphBuilder(
+        init_chat_model(
+            model="gpt-4o-mini", 
+            model_provider="openai", 
+            api_key=OPENAI_API_KEY, 
+            temperature=0.7
+        )
+    )
     yield builder
 
 async def get_agent(graph_builder: LangGraphBuilder=Depends(get_graph_builder)):

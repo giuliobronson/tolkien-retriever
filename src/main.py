@@ -1,8 +1,7 @@
 from fastapi import FastAPI
 
-from adapters.api.exception_handlers import exception_container
-from adapters.api.routers import session
-from adapters.api.routers import chat
+from infra.adapters.api.exception_handlers import exception_container
+from infra.adapters.api.routers import chat, session
 
 
 app = FastAPI()

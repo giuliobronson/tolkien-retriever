@@ -1,6 +1,6 @@
-from adapters.api.dto.session_dto import SessionDTO
-from adapters.mappers.message_mapper import MessageMapper
+from infra.adapters.api.dto.session_dto import SessionDTO
 from core.domain.entities.session import Session
+from infra.mappers.message_mapper import MessageMapper
 
 
 class SessionMapper:

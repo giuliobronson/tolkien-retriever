@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 
-from adapters.api.dependencies import get_session_service
-from adapters.api.dto.message_dto import MessageDTO
-from adapters.api.dto.session_dto import SessionDTO
+from infra.adapters.api.dependencies import get_session_service
+from infra.adapters.api.dto.message_dto import MessageDTO
+from infra.adapters.api.dto.session_dto import SessionDTO
 from core.application.services.session_service import SessionService
 from infra.mappers.message_mapper import MessageMapper
 from infra.mappers.session_mapper import SessionMapper
