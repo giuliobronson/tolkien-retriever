@@ -4,14 +4,15 @@ from core.ports.repositories.session_repository import ISessionRepository
 
 
 class InMemorySessionRepository(ISessionRepository):
-    def __init__(self):
-        self.db = {}
+    db = {}
         
     async def save(self, entity: Session) -> Session:
         self.db[entity.id] = entity
         return entity
 
     async def find_by_id(self, id: str) -> Optional[Session]:
+        if id not in self.db.keys():
+            return None
         return self.db[id]
     
     async def find_all(self) -> List[Session]:

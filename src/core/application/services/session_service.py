@@ -11,10 +11,10 @@ class SessionService:
     
     async def create_session(self, message: Message) -> Session:
         title = "Título Teste"
-        return Session.create(title, message)
+        return await self.session_repository.save(Session.create(title, message))
         
     async def open_session(self, session_id: str):
-        session: Optional[Session] = await self.session_repository.find_by_id(session_id)
+        session = await self.session_repository.find_by_id(session_id)
         if not session:
             raise SessionNotFoundError(session_id)
         return session

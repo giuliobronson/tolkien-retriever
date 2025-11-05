@@ -26,7 +26,7 @@ async def handle_query(
         while True:
             data = await websocket.receive_json()
             response: Message = await chat_service.answer(MessageMapper.to_entity(MessageDTO(**data)))
-            await websocket.send_json(MessageMapper.to_dto(response).model_dump)
+            await websocket.send_json(MessageMapper.to_dto(response).model_dump_json())
 
     except WebSocketDisconnect:
         print(f"Conexão fechada para a sessão {session_id}")
