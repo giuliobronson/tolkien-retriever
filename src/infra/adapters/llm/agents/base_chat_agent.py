@@ -7,7 +7,7 @@ from infra.adapters.llm.state.chat_state import ChatState
 from infra.mappers.message_mapper import MessageMapper
 
 
-class LangGraphAgent(IAgent):
+class BaseChatAgent(IAgent):
     def __init__(self, graph: CompiledStateGraph) -> None:
         self.graph = graph
         self.state = ChatState(messages=[])
