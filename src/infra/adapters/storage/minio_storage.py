@@ -1,4 +1,5 @@
 import io
+from typing import Optional
 from minio import Minio, S3Error
 
 from core.ports.storage.file_storage import IFileStorage
@@ -13,30 +14,30 @@ class MinIOStorage(IFileStorage):
         bucket_name: str,
         secure: bool = False
     ):
-        self.bucket = bucket_name
+        self.bucket_name = bucket_name
         self.client = Minio(
-            endpoint,
+            endpoint=endpoint,
             access_key=access_key,
             secret_key=secret_key,
-            secure=secure,
+            secure=secure
         )
 
         if not self.client.bucket_exists(bucket_name):
             self.client.make_bucket(bucket_name)
 
-    def upload(self, path: str, content: bytes, content_type: str = "application/octet-stream"):
+    def upload(self, path: str, content: bytes, content_type: Optional[str]) -> None:
         self.client.put_object(
-            bucket_name=self.bucket,
+            bucket_name=self.bucket_name,
             object_name=path,
             data=io.BytesIO(content),
             length=len(content),
-            content_type=content_type
+            content_type=content_type or "application/octet-stream"
         )
 
     def download(self, path: str) -> bytes:
         response = None
         try:
-            response = self.client.get_object(self.bucket, path)
+            response = self.client.get_object(self.bucket_name, path)
             return response.read()
         finally:
             if response is not None:
@@ -45,9 +46,8 @@ class MinIOStorage(IFileStorage):
 
     def exists(self, path: str) -> bool:
         try:
-            self.client.stat_object(self.bucket, path)
+            self.client.stat_object(self.bucket_name, path)
             return True
-        except S3Error as e:
-            if e.code == "NoSuchKey":
-                return False
-            raise
+        except S3Error:
+            return False
+        

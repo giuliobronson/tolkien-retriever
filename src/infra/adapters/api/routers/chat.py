@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
 
-from infra.adapters.api.dependencies import get_chat_service, get_session_service
+from infra.adapters.api.dependencies.services import get_chat_service, get_session_service
 from infra.adapters.api.dto.message_dto import MessageDTO
 from core.application.services.chat_service import ChatService
 from core.application.services.session_service import SessionService
