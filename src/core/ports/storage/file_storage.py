@@ -17,4 +17,3 @@ class IFileStorage(ABC):
     def exists(self, path: str) -> bool:
         """Verifica se o arquivo existe no storage."""
         pass
-    
