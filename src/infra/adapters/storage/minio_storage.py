@@ -1,3 +1,4 @@
+import asyncio
 import io
 from typing import Optional
 
@@ -26,33 +27,40 @@ class MinIOStorage(IFileStorage):
         if not self.client.bucket_exists(bucket_name):
             self.client.make_bucket(bucket_name)
 
-    def upload(self, path: str, content: bytes, content_type: Optional[str]) -> None:
+    async def upload(
+        self, path: str, content: bytes, content_type: Optional[str]
+    ) -> None:
         try:
-            self.client.put_object(
+            await asyncio.to_thread(
+                self.client.put_object,
                 bucket_name=self.bucket_name,
                 object_name=path,
                 data=io.BytesIO(content),
                 length=len(content),
                 content_type=content_type or "application/octet-stream",
             )
-        except S3Error:
-            raise  # Erro de conexão
+        except S3Error as e:
+            raise RuntimeError(f"Erro ao realizar upload no MinIO: {str(e)}") from e
 
-    def download(self, path: str) -> bytes:
+    async def download(self, path: str) -> bytes:
         response = None
         try:
-            response = self.client.get_object(self.bucket_name, path)
-            return response.read()
+            response = await asyncio.to_thread(
+                self.client.get_object, self.bucket_name, path
+            )
+            return await asyncio.to_thread(response.read)
         finally:
             if response is not None:
                 response.close()
                 response.release_conn()
 
-    def exists(self, path: str) -> bool:
+    async def exists(self, path: str) -> bool:
         try:
-            self.client.stat_object(self.bucket_name, path)
+            await asyncio.to_thread(self.client.stat_object, self.bucket_name, path)
             return True
         except S3Error as e:
             if e.code == "NoSuchKey":
                 return False
-            raise
+            raise RuntimeError(
+                f"Erro ao verificar existência do arquivo no MinIO: {str(e)}"
+            ) from e

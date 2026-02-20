@@ -16,7 +16,7 @@ from infra.adapters.repositories.rulebook.mongodb_rulebook_repository import (
 from infra.adapters.storage.minio_storage import MinIOStorage
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def minio_storage():
     storage = MinIOStorage(
         endpoint=MINIO_ENDPOINT_URL,
@@ -25,7 +25,18 @@ def minio_storage():
         bucket_name=MINIO_BUCKET_DOCUMENTS,
         secure=False,
     )
+
+    objects = storage.client.list_objects(MINIO_BUCKET_DOCUMENTS, recursive=True)
+    for obj in objects:
+        if obj.object_name:
+            storage.client.remove_object(MINIO_BUCKET_DOCUMENTS, obj.object_name)
+
     yield storage
+
+    objects = storage.client.list_objects(MINIO_BUCKET_DOCUMENTS, recursive=True)
+    for obj in objects:
+        if obj.object_name:
+            storage.client.remove_object(MINIO_BUCKET_DOCUMENTS, obj.object_name)
 
 
 @pytest_asyncio.fixture(scope="function")

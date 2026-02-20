@@ -1,4 +1,3 @@
-import asyncio
 from typing import Optional
 
 from core.domain.entities.rulebook import Rulebook
@@ -30,5 +29,4 @@ class RulebookService:
 
         # TODO: Extração do texto do documento
 
-        # TODO: Upinsert no storage
-        await asyncio.to_thread(self.storage.upload, path, content, content_type)
+        await self.storage.upload(path, content, content_type)
