@@ -37,6 +37,6 @@ class RulebookMapper:
         return Rulebook(
             hash=hash,
             creation_date=datetime.now(),
-            processing_status=ProcessingStatus.IN_PROGRESS,
+            processing_status=ProcessingStatus.PENDING,
             **dto.model_dump(),
         )

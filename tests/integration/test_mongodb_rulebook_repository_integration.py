@@ -19,7 +19,7 @@ class TestMongoDBRulebookRepositoryIntegration:
             number_of_players=4,
             img_path="/tmp/handbook.png",
             playing_time="2-3h",
-            processing_status=ProcessingStatus.IN_PROGRESS,
+            processing_status=ProcessingStatus.PENDING,
         )
 
     @pytest.mark.asyncio
