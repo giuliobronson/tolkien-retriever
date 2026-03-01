@@ -20,16 +20,9 @@ Instalação com dependências de desenvolvimento:
 pip install -e .[dev]
 ```
 
-Setup rápido com `uv` (recomendado):
-
-```bash
-uv venv
-source .venv/bin/activate
-uv pip install -e ".[dev]"
-```
 ## Pre-commit
 
-Instalar hooks (uma vez por clone):
+Instalar hooks:
 
 ```bash
 pre-commit install

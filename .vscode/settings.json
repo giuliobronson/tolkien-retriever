@@ -1,7 +1,6 @@
 {
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter",
-    "editor.formatOnSave": true
   },
   "black-formatter.importStrategy": "fromEnvironment",
   "isort.args": ["--profile", "black"],
