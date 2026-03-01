@@ -6,4 +6,4 @@ class LangChainProcesser(IRulebookProcesser):
 
     async def process(self, content: bytes, filename: str) -> None:
         loader = DoclingLoader(content, filename)
-        loader.lazy_load()
+        loader.alazy_load()

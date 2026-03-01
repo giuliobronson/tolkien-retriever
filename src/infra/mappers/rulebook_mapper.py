@@ -13,8 +13,8 @@ class RulebookMapper:
             "game_name": rulebook.game_name,
             "creation_date": rulebook.creation_date,
             "categories": rulebook.categories,
-            "number_of_players": rulebook.number_of_players,
-            "img_path": rulebook.img_path,
+            "min_players": rulebook.min_players,
+            "max_players": rulebook.max_players,
             "playing_time": rulebook.playing_time,
             "processing_status": rulebook.processing_status.value,
         }
@@ -26,8 +26,8 @@ class RulebookMapper:
             game_name=doc["game_name"],
             creation_date=doc["creation_date"],
             categories=doc["categories"],
-            number_of_players=doc["number_of_players"],
-            img_path=doc["img_path"],
+            min_players=doc["min_players"],
+            max_players=doc["max_players"],
             playing_time=doc["playing_time"],
             processing_status=ProcessingStatus(doc["processing_status"]),
         )

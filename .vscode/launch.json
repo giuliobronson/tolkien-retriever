@@ -16,8 +16,9 @@
       ],
       "justMyCode": true,
       "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
       "env": {
-        "PYTHONPATH": "${workspaceFolder}/venv/bin/python"
+        "PYTHONPATH": "${workspaceFolder}/src"
       }
     }
   ]

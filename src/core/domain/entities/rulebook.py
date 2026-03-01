@@ -12,11 +12,9 @@ class Rulebook:
     game_name: str
     creation_date: datetime
     categories: List[str]
-    number_of_players: (
-        int  # Deveria ser um string com o range? Ou deveria ter o min e máx
-    )
-    img_path: str
-    playing_time: str  # Deveria ser um string com o range? Ou deveria ter o min e máx
+    min_players: int
+    max_players: int
+    playing_time: str
     processing_status: ProcessingStatus
 
     def __post_init__(self):
@@ -26,12 +24,12 @@ class Rulebook:
 
     def _validate_game_name(self):
         if not self.game_name or not self.game_name.strip():
-            raise InvalidRulebookError("Game name must not be empty")
+            raise InvalidRulebookError("Nome do jogo não pode ser vazio")
 
     def _validate_hash(self):
         if not self.hash or not self.hash.strip():
-            raise InvalidRulebookError("Hash must not be empty")
+            raise InvalidRulebookError("Hash não pode ser vazio")
 
     def _validate_number_of_players(self):
-        if self.number_of_players <= 0:
-            raise InvalidRulebookError("Number of players must be positive")
+        if self.min_players <= 0 and self.max_players >= self.min_players:
+            raise InvalidRulebookError("Número de jogadores deve ser válido")
