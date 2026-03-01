@@ -16,7 +16,7 @@ class BaseChatFactory(IAgentFactory):
         state["messages"].append(response)
         return state
     
-    def create_agent(self) -> IAgent:
+    def create(self) -> IAgent:
         workflow = StateGraph(ChatState)
         workflow.add_node("generate", self.generate)
         workflow.add_edge(START, "generate")

@@ -9,7 +9,7 @@ def build_expand_query(history: List[BaseMessage]) -> List[BaseMessage]:
         HumanMessage(content="Resuma o objetivo atual do usuário em uma frase curta, clara e pesquisável.")
     ]
 
-def build_rag_prompt(history: List[BaseMessage], documents: List[Document]):
+def build_rag_prompt(history: List[BaseMessage], documents):
     return [
         SystemMessage(
             content=f"""
