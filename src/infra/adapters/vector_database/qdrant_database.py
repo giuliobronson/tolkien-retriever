@@ -1,4 +1,5 @@
 from typing import List
+
 from qdrant_client import QdrantClient
 from qdrant_client.http.models import PointStruct
 
@@ -10,7 +11,7 @@ class QdrantDatabase(IVectorDatabase):
     def __init__(self, client: QdrantClient, collection_name: str, embedder):
         self.client = client
         self.collection = collection_name
-        self.embedder = embedder 
+        self.embedder = embedder
 
     async def add(self, documents: List[Document]) -> None:
         points = []
@@ -20,10 +21,7 @@ class QdrantDatabase(IVectorDatabase):
                 PointStruct(
                     id=doc.id,
                     vector=embedding,
-                    payload={
-                        "content": doc.content,
-                        "metadata": doc.metadata or {}
-                    }
+                    payload={"content": doc.content, "metadata": doc.metadata or {}},
                 )
             )
         self.client.upsert(collection_name=self.collection, points=points)
@@ -31,15 +29,13 @@ class QdrantDatabase(IVectorDatabase):
     async def similarity_search(self, query: str, k: int = 5) -> List[Document]:
         embedding = self.embedder.embed(query)
         hits = self.client.search(
-            collection_name=self.collection,
-            query_vector=embedding,
-            limit=k
+            collection_name=self.collection, query_vector=embedding, limit=k
         )
         results = [
             Document(
                 id=str(hit.id),
                 content=hit.payload["content"],
-                metadata=hit.payload.get("metadata")
+                metadata=hit.payload.get("metadata"),
             )
             for hit in hits
         ]
@@ -48,6 +44,5 @@ class QdrantDatabase(IVectorDatabase):
 
     async def delete(self, doc_id: str) -> None:
         self.client.delete(
-            collection_name=self.collection,
-            points_selector={"points": [doc_id]}
+            collection_name=self.collection, points_selector={"points": [doc_id]}
         )

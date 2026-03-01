@@ -1,5 +1,5 @@
 from langchain.chat_models import BaseChatModel
-from langgraph.graph.state import START, END, StateGraph, CompiledStateGraph
+from langgraph.graph.state import END, START, CompiledStateGraph, StateGraph
 
 from core.ports.llm.agent import IAgent
 from core.ports.llm.agent_factory import IAgentFactory
@@ -17,26 +17,17 @@ class RagFactory(IAgentFactory):
     def _expand_query(self, state: RagState) -> RagState:
         prompt = build_expand_query(state["messages"])
         query = self.llm.invoke(prompt)
-        return {
-            **state,
-            "query": query
-        }
-    
+        return {**state, "query": query}
+
     def _retrieve(self, state: RagState) -> RagState:
         documents = self.vector_database.similarity_search(state["query"], k=5)
-        return {
-            **state,
-            "documents": documents
-        }
-        
+        return {**state, "documents": documents}
+
     def _generate(self, state: RagState) -> RagState:
         response = self.llm.invoke(state["messages"])
         messages = state["messages"] + [response]
-        return {
-            **state,
-            "messages": messages
-        }
-    
+        return {**state, "messages": messages}
+
     def _build_workflow(self) -> CompiledStateGraph:
         workflow = StateGraph(RagState)
         workflow.add_node("_generate", self._generate)
@@ -47,6 +38,6 @@ class RagFactory(IAgentFactory):
         workflow.add_edge("_retrieve", "_generate")
         workflow.add_edge("_generate", END)
         return workflow.compile()
-    
+
     def create(self) -> IAgent:
         return BaseChatAgent(self._build_workflow())

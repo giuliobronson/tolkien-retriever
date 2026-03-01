@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from mailbox import Message
 from typing import List
+
 from core.domain.entities.document import Document
 
 

@@ -1,4 +1,5 @@
 from typing import List
+
 from langgraph.graph.state import CompiledStateGraph
 
 from core.domain.value_objects.message import Message
@@ -13,8 +14,10 @@ class BaseChatAgent(IAgent):
         self.state = ChatState(messages=[])
 
     def set_state(self, history: List[Message]) -> None:
-        self.state["messages"] = [MessageMapper.to_langgraph(message) for message in history]
-    
+        self.state["messages"] = [
+            MessageMapper.to_langgraph(message) for message in history
+        ]
+
     async def answer(self, input: Message) -> Message:
         self.state["messages"].append(MessageMapper.to_langgraph(input))
         output = self.graph.invoke(self.state)

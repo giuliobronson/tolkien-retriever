@@ -1,4 +1,5 @@
 from typing import List
+
 from langchain_openai import OpenAIEmbeddings
 
 from core.ports.llm.embedder import IEmbedder

@@ -1,5 +1,5 @@
-from infra.adapters.api.dto.session_dto import SessionDTO
 from core.domain.entities.session import Session
+from infra.adapters.api.dto.session_dto import SessionDTO
 from infra.mappers.message_mapper import MessageMapper
 
 
@@ -9,7 +9,7 @@ class SessionMapper:
         return SessionDTO(
             id=session.id,
             title=session.title,
-            messages=[MessageMapper.to_dto(message) for message in session.messages]
+            messages=[MessageMapper.to_dto(message) for message in session.messages],
         )
 
     @staticmethod
@@ -17,5 +17,7 @@ class SessionMapper:
         return Session(
             id=session_dto.id,
             title=session_dto.title,
-            messages=[MessageMapper.to_entity(message) for message in session_dto.messages]
+            messages=[
+                MessageMapper.to_entity(message) for message in session_dto.messages
+            ],
         )

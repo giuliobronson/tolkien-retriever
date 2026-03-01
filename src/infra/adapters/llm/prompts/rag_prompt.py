@@ -1,13 +1,19 @@
 from typing import List
-from langchain_core.messages import BaseMessage, SystemMessage, HumanMessage
+
+from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 
 
 def build_expand_query(history: List[BaseMessage]) -> List[BaseMessage]:
     return [
-        SystemMessage(content="Baseado no histórico abaixo, gere uma query breve e específica para busca RAG."),
+        SystemMessage(
+            content="Baseado no histórico abaixo, gere uma query breve e específica para busca RAG."
+        ),
         *history,
-        HumanMessage(content="Resuma o objetivo atual do usuário em uma frase curta, clara e pesquisável.")
+        HumanMessage(
+            content="Resuma o objetivo atual do usuário em uma frase curta, clara e pesquisável."
+        ),
     ]
+
 
 def build_rag_prompt(history: List[BaseMessage], documents):
     return [
@@ -25,5 +31,5 @@ def build_rag_prompt(history: List[BaseMessage], documents):
                 {documents}
             """
         ),
-        *history
+        *history,
     ]

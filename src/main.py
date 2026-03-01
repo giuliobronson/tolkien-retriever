@@ -3,7 +3,6 @@ from fastapi import FastAPI
 from infra.adapters.api.exception_handlers import exception_container
 from infra.adapters.api.routers import chat, rulebook, session
 
-
 app = FastAPI()
 
 app.include_router(chat.router)

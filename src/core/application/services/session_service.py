@@ -1,18 +1,19 @@
 from typing import Optional
-from core.ports.repositories.session_repository import ISessionRepository
-from core.domain.value_objects.message import Message
+
 from core.domain.entities.session import Session
 from core.domain.exceptions.session_not_found_error import SessionNotFoundError
+from core.domain.value_objects.message import Message
+from core.ports.repositories.session_repository import ISessionRepository
 
 
 class SessionService:
     def __init__(self, session_repository: ISessionRepository) -> None:
         self.session_repository = session_repository
-    
+
     async def create_session(self, message: Message) -> Session:
         title = "Título Teste"
         return await self.session_repository.save(Session.create(title, message))
-        
+
     async def open_session(self, session_id: str):
         session = await self.session_repository.find_by_id(session_id)
         if not session:
