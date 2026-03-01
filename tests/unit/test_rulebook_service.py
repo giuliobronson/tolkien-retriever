@@ -21,8 +21,8 @@ class TestRulebookService:
             game_name="Lord of the Rings",
             creation_date=datetime(2024, 1, 1),
             categories=["adventure"],
-            number_of_players=4,
-            img_path="images/lotr.png",
+            min_players=4,
+            max_players=8,
             playing_time="90-120 min",
             processing_status=ProcessingStatus.PENDING,
         )
@@ -97,8 +97,8 @@ class TestRulebookService:
             game_name="Lord of the Rings",
             creation_date=datetime(2024, 1, 1),
             categories=["adventure"],
-            number_of_players=4,
-            img_path="images/lotr.png",
+            min_players=4,
+            max_players=8,
             playing_time="90-120 min",
             processing_status=ProcessingStatus.ERROR,
         )
@@ -130,8 +130,8 @@ class TestRulebookService:
             game_name="Lord of the Rings",
             creation_date=datetime(2024, 1, 1),
             categories=["adventure"],
-            number_of_players=4,
-            img_path="images/lotr.png",
+            min_players=4,
+            max_players=8,
             playing_time="90-120 min",
             processing_status=ProcessingStatus.PENDING,
         )
