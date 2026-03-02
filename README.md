@@ -4,7 +4,7 @@ Backend API para processamento de manuais de jogos de tabuleiro e chat com supor
 
 ## Requisitos
 
-- Python 3.11+
+- Python 3.10+
 
 ## Instalação
 
@@ -39,17 +39,4 @@ pre-commit run --all-files
 
 ```bash
 uvicorn src.main:app --reload --host 127.0.0.1 --port 8001
-```
-
-## Testes
-
-```bash
-pytest
-```
-
-## Formatação
-
-```bash
-black src tests
-isort src tests
 ```
