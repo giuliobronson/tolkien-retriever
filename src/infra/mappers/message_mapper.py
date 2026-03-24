@@ -4,7 +4,7 @@ from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
 
 from core.domain.value_objects.message import Message
 from core.domain.value_objects.role import Role
-from infra.adapters.api.dto.message_dto import MessageDTO
+from infra.drivers.api.dto.message_dto import MessageDTO
 
 
 class MessageMapper:

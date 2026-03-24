@@ -8,13 +8,13 @@ from core.ports.processer.rulebook_processer import IRulebookProcesser
 from core.ports.repositories.rulebook_repository import IRulebookRepository
 from core.ports.repositories.session_repository import ISessionRepository
 from core.ports.storage.file_storage import IFileStorage
-from infra.adapters.api.dependencies.agents import get_base_chat_agent
-from infra.adapters.api.dependencies.processer import get_rulebook_processer
-from infra.adapters.api.dependencies.repositories import (
+from infra.drivers.api.dependencies.agents import get_base_chat_agent
+from infra.drivers.api.dependencies.processer import get_rulebook_processer
+from infra.drivers.api.dependencies.repositories import (
     get_rulebook_repository,
     get_session_repository,
 )
-from infra.adapters.api.dependencies.storage import get_file_storage
+from infra.drivers.api.dependencies.storage import get_file_storage
 
 
 async def get_session_service(

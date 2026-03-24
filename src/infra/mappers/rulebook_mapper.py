@@ -2,7 +2,7 @@ from datetime import datetime
 
 from core.domain.entities.rulebook import Rulebook
 from core.domain.enums import ProcessingStatus
-from infra.adapters.api.dto.rulebook_dto import RulebookDTO
+from infra.drivers.api.dto.rulebook_dto import RulebookDTO
 
 
 class RulebookMapper:

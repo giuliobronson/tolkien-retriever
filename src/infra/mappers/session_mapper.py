@@ -1,5 +1,5 @@
 from core.domain.entities.session import Session
-from infra.adapters.api.dto.session_dto import SessionDTO
+from infra.drivers.api.dto.session_dto import SessionDTO
 from infra.mappers.message_mapper import MessageMapper
 
 

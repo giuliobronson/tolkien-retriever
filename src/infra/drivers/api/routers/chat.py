@@ -4,11 +4,11 @@ from core.application.services.chat_service import ChatService
 from core.application.services.session_service import SessionService
 from core.domain.entities.session import Session
 from core.domain.value_objects.message import Message
-from infra.adapters.api.dependencies.services import (
+from infra.drivers.api.dependencies.services import (
     get_chat_service,
     get_session_service,
 )
-from infra.adapters.api.dto.message_dto import MessageDTO
+from infra.drivers.api.dto.message_dto import MessageDTO
 from infra.mappers.message_mapper import MessageMapper
 
 router = APIRouter(prefix="/chat", tags=["chat"])

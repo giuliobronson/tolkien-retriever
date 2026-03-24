@@ -3,8 +3,8 @@ import json
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 
 from core.application.services.rulebook_service import RulebookService
-from infra.adapters.api.dependencies.services import get_rulebook_service
-from infra.adapters.api.dto.rulebook_dto import RulebookDTO
+from infra.drivers.api.dependencies.services import get_rulebook_service
+from infra.drivers.api.dto.rulebook_dto import RulebookDTO
 from infra.adapters.utils import calculate_file_hash
 from infra.mappers.rulebook_mapper import RulebookMapper
 

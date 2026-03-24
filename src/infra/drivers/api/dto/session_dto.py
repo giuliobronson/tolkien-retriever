@@ -2,7 +2,7 @@ from typing import List
 
 from pydantic import BaseModel
 
-from infra.adapters.api.dto.message_dto import MessageDTO
+from infra.drivers.api.dto.message_dto import MessageDTO
 
 
 class SessionDTO(BaseModel):
