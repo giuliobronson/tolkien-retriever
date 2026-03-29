@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 
 from core.domain.exceptions.rulebook_not_processed import RulebookNotProcessed
+from core.domain.exceptions.rulebook_processing_failed import RulebookProcessingFailed
 from core.domain.exceptions.session_not_found_error import SessionNotFoundError
 
 
@@ -20,4 +21,12 @@ def exception_container(app: FastAPI) -> None:
     ) -> JSONResponse:
         return JSONResponse(
             status_code=status.HTTP_409_CONFLICT, content={"message": str(exc)}
+        )
+    
+    @app.exception_handler(RulebookProcessingFailed)
+    async def rulebook_processing_failed_handler(
+        request: Request, exc: RulebookProcessingFailed
+    ) -> JSONResponse:
+        return JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content={"message": str(exc)}
         )

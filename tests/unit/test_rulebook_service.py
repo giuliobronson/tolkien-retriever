@@ -7,7 +7,7 @@ from core.application.services.rulebook_service import RulebookService
 from core.domain.entities.rulebook import Rulebook
 from core.domain.enums import ProcessingStatus
 from core.domain.exceptions.rulebook_not_processed import RulebookNotProcessed
-from core.ports.processer.rulebook_processer import IRulebookProcesser
+from core.ports.pipeline.rulebook_pipeline import IRulebookPipeline
 from core.ports.repositories.rulebook_repository import IRulebookRepository
 from core.ports.storage.file_storage import IFileStorage
 
@@ -34,9 +34,9 @@ class TestRulebookService:
         return mock
 
     @pytest.fixture
-    def processor(self) -> IRulebookProcesser:
-        mock = MagicMock(spec=IRulebookProcesser)
-        mock.process = AsyncMock(return_value=None)
+    def processor(self) -> IRulebookPipeline:
+        mock = MagicMock(spec=IRulebookPipeline)
+        mock.execute = AsyncMock(return_value=None)
         return mock
 
     @pytest.fixture
@@ -51,12 +51,12 @@ class TestRulebookService:
     def service(
         self,
         storage: IFileStorage,
-        processor: IRulebookProcesser,
+        processor: IRulebookPipeline,
         rulebook_repository: IRulebookRepository,
     ) -> RulebookService:
         return RulebookService(
             storage=storage,
-            processor=processor,
+            pipeline=processor,
             rulebook_repository=rulebook_repository,
         )
 
@@ -77,8 +77,8 @@ class TestRulebookService:
         )
 
         rulebook_repository.save.assert_awaited_once_with(rulebook)
-        rulebook_repository.update.assert_not_awaited()
-        processor.process.assert_awaited_once_with(b"pdf content", "lotr.pdf")
+        rulebook_repository.update.assert_awaited_once_with(rulebook.hash, rulebook)
+        processor.execute.assert_awaited_once_with(b"pdf content", "lotr.pdf")
         storage.upload.assert_awaited_once_with(
             "lotr.pdf", b"pdf content", "application/pdf"
         )
@@ -111,9 +111,9 @@ class TestRulebookService:
             rulebook=rulebook,
         )
 
-        rulebook_repository.update.assert_awaited_once_with(rulebook.hash, rulebook)
+        assert rulebook_repository.update.await_count == 2
         rulebook_repository.save.assert_not_awaited()
-        processor.process.assert_awaited_once_with(b"pdf content", "lotr.pdf")
+        processor.execute.assert_awaited_once_with(b"pdf content", "lotr.pdf")
         storage.upload.assert_awaited_once_with(
             "lotr.pdf", b"pdf content", "application/pdf"
         )
