@@ -3,14 +3,13 @@ from langgraph.graph.state import END, START, CompiledStateGraph, StateGraph
 
 from core.ports.llm.agent import IAgent
 from core.ports.llm.agent_factory import IAgentFactory
-from core.ports.vector_database.vector_database import IVectorDatabase
 from infra.adapters.llm.agents.base_chat_agent import BaseChatAgent
 from infra.adapters.llm.prompts.rag_prompt import build_expand_query
 from infra.adapters.llm.state.rag_state import RagState
 
 
 class RagFactory(IAgentFactory):
-    def __init__(self, model: BaseChatModel, vector_database: IVectorDatabase) -> None:
+    def __init__(self, model: BaseChatModel, vector_database) -> None:
         self.llm = model
         self.vector_database = vector_database
 

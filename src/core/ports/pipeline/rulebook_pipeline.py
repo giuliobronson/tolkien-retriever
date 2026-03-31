@@ -3,8 +3,8 @@ from abc import ABC, abstractmethod
 from core.domain.entities.rulebook import Rulebook
 
 
-class IRulebookProcesser(ABC):
+class IRulebookPipeline(ABC):
 
     @abstractmethod
-    async def process(self, content: bytes, filename: str) -> None:
+    async def execute(self, content: bytes, filename: str) -> None:
         pass
