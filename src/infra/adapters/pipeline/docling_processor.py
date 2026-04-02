@@ -20,7 +20,9 @@ class DoclingProcessor(IDocumentProcessor):
         pipeline_options.do_ocr = True
         pipeline_options.do_table_structure = True
         self.converter = DocumentConverter(
-            format_options={InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)}
+            format_options={
+                InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
+            }
         )
         self.chunker = HybridChunker(repeat_table_header=True)
 

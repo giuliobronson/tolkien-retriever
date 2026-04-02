@@ -20,9 +20,7 @@ class InMemorySessionRepository(ISessionRepository):
         return list(self.db.values())
 
     async def find_by_rulebook_id(self, rulebook_id: str) -> Optional[Session]:
-        return next(
-            (s for s in self.db.values() if s.rulebook_id == rulebook_id), None
-        )
+        return next((s for s in self.db.values() if s.rulebook_id == rulebook_id), None)
 
     async def update(self, id: str, entity: Session) -> Session:
         self.db[id] = entity
