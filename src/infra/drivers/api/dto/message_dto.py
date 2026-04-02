@@ -1,12 +1,12 @@
 import datetime
-from dataclasses import dataclass
 from typing import Optional
+
+from pydantic import BaseModel
 
 from core.domain.value_objects.role import Role
 
 
-@dataclass
-class Message:
+class MessageDTO(BaseModel):
     role: Role
     content: str
     timestamp: Optional[datetime.datetime]

@@ -1,18 +1,18 @@
 from datetime import datetime
-from langchain_core.messages import BaseMessage, HumanMessage, AIMessage
+from typing import List
 
-from infra.adapters.api.dto.message_dto import MessageDTO
+from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
+
 from core.domain.value_objects.message import Message
 from core.domain.value_objects.role import Role
+from infra.drivers.api.dto.message_dto import MessageDTO
 
 
 class MessageMapper:
     @staticmethod
     def to_dto(message: Message) -> MessageDTO:
         return MessageDTO(
-            role=message.role,
-            content=message.content,
-            timestamp=message.timestamp
+            role=message.role, content=message.content, timestamp=message.timestamp
         )
 
     @staticmethod
@@ -20,9 +20,9 @@ class MessageMapper:
         return Message(
             role=message_dto.role,
             content=message_dto.content,
-            timestamp=message_dto.timestamp
+            timestamp=message_dto.timestamp,
         )
-        
+
     @staticmethod
     def to_langgraph(message: Message) -> BaseMessage:
         kwargs = {"timestamp": message.timestamp or datetime.now()}
@@ -31,15 +31,41 @@ class MessageMapper:
         elif message.role == Role.ASSISTANT:
             return AIMessage(content=message.content, additional_kwargs=kwargs)
         raise ValueError(f"Role desconhecida ao converter BaseMessage: {message.role}")
-    
+
     @staticmethod
     def from_langgraph(message: BaseMessage) -> Message:
         return Message(
-            role= MessageMapper._map_type_to_role(message.type),
+            role=MessageMapper._map_type_to_role(message.type),
             content=message.content.__str__(),
-            timestamp=message.additional_kwargs.get("timestamp")
+            timestamp=datetime.now(),
         )
-        
+
+    @staticmethod
+    def to_document(message: Message) -> dict:
+        return {
+            "role": message.role.value,
+            "content": message.content,
+            "timestamp": message.timestamp,
+        }
+
+    @staticmethod
+    def from_document(doc: dict) -> Message:
+        return Message(
+            role=Role(doc["role"]),
+            content=doc["content"],
+            timestamp=doc.get("timestamp"),
+        )
+
+    @staticmethod
+    def history_from_langgraph(messages: List[BaseMessage]) -> List[Message]:
+        return [
+            MessageMapper.from_langgraph(m)
+            for m in messages
+            if m.type in ("human", "ai")
+            and isinstance(m.content, str)
+            and m.content
+        ]
+
     @staticmethod
     def _map_type_to_role(type: str) -> Role:
         if type == "human":
