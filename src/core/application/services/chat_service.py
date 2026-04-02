@@ -1,5 +1,4 @@
 from core.domain.entities.session import Session
-from core.domain.exceptions.no_active_session_error import NoActiveSessionError
 from core.domain.value_objects.message import Message
 from core.ports.llm.agent import IAgent
 from core.ports.repositories.session_repository import ISessionRepository
@@ -13,12 +12,11 @@ class ChatService:
 
     def load_session(self, session: Session) -> None:
         self.current_session = session
-        self.agent.set_state(session.messages)
+        self.agent.set_history(session.messages)
 
     async def answer(self, query: Message) -> Message:
+        assert self.current_session is not None
         response = await self.agent.answer(query)
-        if not self.current_session:
-            raise NoActiveSessionError()
-        self.current_session.messages.extend([query, response])
+        self.current_session.messages = self.agent.get_history()
         await self.session_repository.save(self.current_session)
         return response

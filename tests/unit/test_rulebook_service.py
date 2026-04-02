@@ -17,6 +17,7 @@ class TestRulebookService:
     @pytest.fixture
     def rulebook(self) -> Rulebook:
         return Rulebook(
+            id="test-rulebook-id",
             hash="abc123",
             game_name="Lord of the Rings",
             creation_date=datetime(2024, 1, 1),
@@ -42,7 +43,7 @@ class TestRulebookService:
     @pytest.fixture
     def rulebook_repository(self) -> IRulebookRepository:
         mock = MagicMock(spec=IRulebookRepository)
-        mock.find_by_id = AsyncMock(return_value=None)
+        mock.find_by_hash = AsyncMock(return_value=None)
         mock.save = AsyncMock(return_value=None)
         mock.update = AsyncMock(return_value=None)
         return mock
@@ -77,7 +78,7 @@ class TestRulebookService:
         )
 
         rulebook_repository.save.assert_awaited_once_with(rulebook)
-        rulebook_repository.update.assert_awaited_once_with(rulebook.hash, rulebook)
+        rulebook_repository.update.assert_awaited_once_with(rulebook.id, rulebook)
         processor.execute.assert_awaited_once_with(b"pdf content", "lotr.pdf")
         storage.upload.assert_awaited_once_with(
             "lotr.pdf", b"pdf content", "application/pdf"
@@ -93,6 +94,7 @@ class TestRulebookService:
         rulebook: Rulebook,
     ) -> None:
         existing = Rulebook(
+            id="existing-rulebook-id",
             hash="abc123",
             game_name="Lord of the Rings",
             creation_date=datetime(2024, 1, 1),
@@ -102,7 +104,7 @@ class TestRulebookService:
             playing_time="90-120 min",
             processing_status=ProcessingStatus.ERROR,
         )
-        rulebook_repository.find_by_id = AsyncMock(return_value=existing)
+        rulebook_repository.find_by_hash = AsyncMock(return_value=existing)
 
         await service.upload_rulebook(
             filename="lotr.pdf",
@@ -126,6 +128,7 @@ class TestRulebookService:
         rulebook: Rulebook,
     ) -> None:
         existing = Rulebook(
+            id="existing-rulebook-id",
             hash="abc123",
             game_name="Lord of the Rings",
             creation_date=datetime(2024, 1, 1),
@@ -135,7 +138,7 @@ class TestRulebookService:
             playing_time="90-120 min",
             processing_status=ProcessingStatus.PENDING,
         )
-        rulebook_repository.find_by_id = AsyncMock(return_value=existing)
+        rulebook_repository.find_by_hash = AsyncMock(return_value=existing)
 
         with pytest.raises(RulebookNotProcessed):
             await service.upload_rulebook(

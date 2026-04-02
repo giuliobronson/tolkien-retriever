@@ -8,6 +8,7 @@ from core.domain.exceptions.invalid_rulebook_error import InvalidRulebookError
 
 @dataclass
 class Rulebook:
+    id: str
     hash: str
     game_name: str
     creation_date: datetime

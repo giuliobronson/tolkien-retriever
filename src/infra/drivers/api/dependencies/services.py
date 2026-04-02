@@ -8,7 +8,7 @@ from core.ports.pipeline.rulebook_pipeline import IRulebookPipeline
 from core.ports.repositories.rulebook_repository import IRulebookRepository
 from core.ports.repositories.session_repository import ISessionRepository
 from core.ports.storage.file_storage import IFileStorage
-from infra.drivers.api.dependencies.agents import get_base_chat_agent
+from infra.drivers.api.dependencies.agents import get_agent
 from infra.drivers.api.dependencies.pipeline import get_rulebook_pipeline
 from infra.drivers.api.dependencies.repositories import (
     get_rulebook_repository,
@@ -26,15 +26,7 @@ async def get_session_service(
 
 async def get_chat_service(
     repository: ISessionRepository = Depends(get_session_repository),
-    agent: IAgent = Depends(get_base_chat_agent),
-):
-    service = ChatService(repository, agent)
-    yield service
-
-
-async def get_rag_service(
-    repository: ISessionRepository = Depends(get_session_repository),
-    agent: IAgent = Depends(get_base_chat_agent),
+    agent: IAgent = Depends(get_agent),
 ):
     service = ChatService(repository, agent)
     yield service
