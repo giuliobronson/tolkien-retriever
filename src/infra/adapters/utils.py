@@ -1,5 +1,10 @@
 import hashlib
+from pathlib import Path
 from typing import Literal
+
+
+def load_text(path: Path) -> str:
+    return path.read_text(encoding="utf-8")
 
 
 def calculate_file_hash(

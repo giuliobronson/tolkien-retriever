@@ -6,7 +6,11 @@ from core.domain.value_objects.message import Message
 
 class IAgent(ABC):
     @abstractmethod
-    def set_state(self, history: List[Message]) -> None:
+    def set_history(self, history: List[Message]) -> None:
+        pass
+
+    @abstractmethod
+    def get_history(self) -> List[Message]:
         pass
 
     @abstractmethod

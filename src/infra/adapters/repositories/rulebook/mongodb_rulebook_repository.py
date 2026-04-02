@@ -18,7 +18,11 @@ class MongoDBRulebookRepository(IRulebookRepository):
         return entity
 
     async def find_by_id(self, id: str) -> Optional[Rulebook]:
-        result = await self.collection.find_one({"hash": id})
+        result = await self.collection.find_one({"id": id})
+        return RulebookMapper.document_to_entity(result) if result else None
+
+    async def find_by_hash(self, hash: str) -> Optional[Rulebook]:
+        result = await self.collection.find_one({"hash": hash})
         return RulebookMapper.document_to_entity(result) if result else None
 
     async def find_all(self) -> List[Rulebook]:
@@ -27,8 +31,8 @@ class MongoDBRulebookRepository(IRulebookRepository):
 
     async def update(self, id: str, entity: Rulebook) -> Rulebook:
         rulebook_dict = RulebookMapper.entity_to_document(entity)
-        await self.collection.update_one({"hash": id}, {"$set": rulebook_dict})
+        await self.collection.update_one({"id": id}, {"$set": rulebook_dict})
         return entity
 
     async def delete(self, id: str) -> None:
-        await self.collection.delete_one({"hash": id})
+        await self.collection.delete_one({"id": id})

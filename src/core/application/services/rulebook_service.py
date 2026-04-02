@@ -28,14 +28,15 @@ class RulebookService:
         rulebook: Rulebook,
     ) -> None:
         # Verificação da existência e status de processamento do arquivo
-        result = await self.rulebook_repository.find_by_id(rulebook.hash)
+        result = await self.rulebook_repository.find_by_hash(rulebook.hash)
 
         # Persistência dos metadados do Rulebook no banco de dados
         if result:
             if result.processing_status == ProcessingStatus.PENDING:
                 raise RulebookNotProcessed(result.hash)
             else:
-                await self.rulebook_repository.update(result.hash, rulebook)
+                rulebook.id = result.id
+                await self.rulebook_repository.update(result.id, rulebook)
         else:
             await self.rulebook_repository.save(rulebook)
 
@@ -48,4 +49,4 @@ class RulebookService:
             rulebook.processing_status = ProcessingStatus.ERROR
             raise RulebookProcessingFailed(rulebook.hash)
         finally:
-            await self.rulebook_repository.update(rulebook.hash, rulebook)
+            await self.rulebook_repository.update(rulebook.id, rulebook)

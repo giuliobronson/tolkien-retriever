@@ -7,5 +7,5 @@ from infra.drivers.api.dto.message_dto import MessageDTO
 
 class SessionDTO(BaseModel):
     id: str
-    title: str
+    rulebook_id: str
     messages: List[MessageDTO]
