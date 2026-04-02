@@ -27,7 +27,9 @@ class MongoDBSessionRepository(ISessionRepository):
     async def find_all(self) -> List[Session]:
         cursor = self.collection.find({})
         docs = await cursor.to_list(length=None)
-        return [s for doc in docs if (s := SessionMapper.from_document(doc)) is not None]
+        return [
+            s for doc in docs if (s := SessionMapper.from_document(doc)) is not None
+        ]
 
     async def update(self, id: str, entity: Session) -> Session:
         data = SessionMapper.to_document(entity)
