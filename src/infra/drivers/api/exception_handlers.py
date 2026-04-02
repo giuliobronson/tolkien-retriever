@@ -13,11 +13,12 @@ def exception_container(app: FastAPI) -> None:
         return JSONResponse(
             status_code=status.HTTP_409_CONFLICT, content={"message": str(exc)}
         )
-    
+
     @app.exception_handler(RulebookProcessingFailed)
     async def rulebook_processing_failed_handler(
         request: Request, exc: RulebookProcessingFailed
     ) -> JSONResponse:
         return JSONResponse(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content={"message": str(exc)}
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={"message": str(exc)},
         )

@@ -29,7 +29,9 @@ async def handle_query(
             data = await websocket.receive_json()
             query = Message(role=Role.USER, content=data["content"], timestamp=None)
             response = await chat_service.answer(query)
-            await websocket.send_json(MessageMapper.to_dto(response).model_dump(mode="json"))
+            await websocket.send_json(
+                MessageMapper.to_dto(response).model_dump(mode="json")
+            )
 
     except WebSocketDisconnect:
         print(f"Conexão fechada para o rulebook {rulebook_id}")

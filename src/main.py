@@ -1,7 +1,6 @@
-import config
-
 from fastapi import FastAPI
 
+import config
 from infra.drivers.api.exception_handlers import exception_container
 from infra.drivers.api.routers import chat, rulebook, session
 

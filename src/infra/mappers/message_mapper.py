@@ -61,9 +61,7 @@ class MessageMapper:
         return [
             MessageMapper.from_langgraph(m)
             for m in messages
-            if m.type in ("human", "ai")
-            and isinstance(m.content, str)
-            and m.content
+            if m.type in ("human", "ai") and isinstance(m.content, str) and m.content
         ]
 
     @staticmethod
