@@ -18,9 +18,10 @@ from infra.drivers.api.dependencies.storage import get_file_storage
 
 
 async def get_session_service(
-    repository: ISessionRepository = Depends(get_session_repository),
+    session_repository: ISessionRepository = Depends(get_session_repository),
+    rulebook_repository: IRulebookRepository = Depends(get_rulebook_repository),
 ):
-    service = SessionService(repository)
+    service = SessionService(session_repository, rulebook_repository)
     yield service
 
 
