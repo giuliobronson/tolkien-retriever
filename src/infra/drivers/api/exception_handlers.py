@@ -5,6 +5,7 @@ from core.domain.exceptions.invalid_rulebook_error import InvalidRulebookError
 from core.domain.exceptions.rulebook_not_found_error import RulebookNotFoundError
 from core.domain.exceptions.rulebook_not_processed import RulebookNotProcessed
 from core.domain.exceptions.rulebook_processing_failed import RulebookProcessingFailed
+from core.domain.exceptions.session_not_found_error import SessionNotFoundError
 
 
 def exception_container(app: FastAPI) -> None:
@@ -28,6 +29,14 @@ def exception_container(app: FastAPI) -> None:
     @app.exception_handler(RulebookNotFoundError)
     async def rulebook_not_found_handler(
         request: Request, exc: RulebookNotFoundError
+    ) -> JSONResponse:
+        return JSONResponse(
+            status_code=status.HTTP_404_NOT_FOUND, content={"message": str(exc)}
+        )
+
+    @app.exception_handler(SessionNotFoundError)
+    async def session_not_found_handler(
+        request: Request, exc: SessionNotFoundError
     ) -> JSONResponse:
         return JSONResponse(
             status_code=status.HTTP_404_NOT_FOUND, content={"message": str(exc)}
