@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 
 from core.domain.entities.rulebook import Rulebook
 from core.domain.enums import ProcessingStatus

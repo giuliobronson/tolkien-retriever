@@ -25,6 +25,10 @@ class MongoDBRulebookRepository(IRulebookRepository):
         result = await self.collection.find_one({"hash": hash})
         return RulebookMapper.document_to_entity(result) if result else None
 
+    async def find_by_ids(self, ids: List[str]) -> List[Rulebook]:
+        results = await self.collection.find({"id": {"$in": ids}}).to_list(None)
+        return [RulebookMapper.document_to_entity(doc) for doc in results]
+
     async def find_all(self) -> List[Rulebook]:
         results = await self.collection.find({}).to_list(None)
         return [RulebookMapper.document_to_entity(doc) for doc in results]
