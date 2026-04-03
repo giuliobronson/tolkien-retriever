@@ -8,4 +8,4 @@ from core.ports.repositories.repository_port import RepositoryPort
 class ISessionRepository(RepositoryPort[Session, str]):
     @abstractmethod
     async def find_by_rulebook_id(self, rulebook_id: str) -> Optional[Session]:
-        raise NotImplementedError
+        pass
