@@ -1,3 +1,5 @@
+from typing import AsyncIterator
+
 from core.domain.entities.session import Session
 from core.domain.value_objects.message import Message
 from core.ports.llm.agent import IAgent
@@ -20,3 +22,10 @@ class ChatService:
         self.current_session.messages = self.agent.get_history()
         await self.session_repository.save(self.current_session)
         return response
+
+    async def answer_stream(self, query: Message) -> AsyncIterator[str]:
+        assert self.current_session is not None
+        async for token in self.agent.answer_stream(query):
+            yield token
+        self.current_session.messages = self.agent.get_history()
+        await self.session_repository.save(self.current_session)
