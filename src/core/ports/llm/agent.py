@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import AsyncIterator, List
 
 from core.domain.value_objects.message import Message
 
@@ -15,4 +15,8 @@ class IAgent(ABC):
 
     @abstractmethod
     async def answer(self, input: Message) -> Message:
+        pass
+
+    @abstractmethod
+    def answer_stream(self, input: Message) -> AsyncIterator[str]:
         pass
