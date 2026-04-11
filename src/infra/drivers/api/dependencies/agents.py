@@ -36,6 +36,7 @@ async def get_agent(
         game_name=rulebook.game_name,
         model=model,
         vector_store=vector_store,
+        rulebook_hash=rulebook.hash,
     )
 
     yield agent_factory.create()
