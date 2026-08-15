@@ -23,7 +23,8 @@ dependencies = [
 	"qdrant-client==1.16.0",
 	"motor==3.7.1",
     "python-multipart==0.0.20",
-    "docling==2.74.0"
+    "docling==2.74.0",
+    "firebase-admin==7.5.0"
 ]
 
 [project.optional-dependencies]

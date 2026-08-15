@@ -34,3 +34,6 @@ EMBEDDING_MODEL = os.getenv("EMBEDDINGS_MODEL", "text-embedding-3-small")
 os.environ.setdefault("LANGCHAIN_TRACING_V2", "false")
 os.environ.setdefault("LANGCHAIN_API_KEY", "")
 os.environ.setdefault("LANGCHAIN_PROJECT", "tolkien-retriever")
+
+# Firebase / Auth
+FIREBASE_CREDENTIALS_PATH = os.getenv("FIREBASE_CREDENTIALS_PATH", "")
