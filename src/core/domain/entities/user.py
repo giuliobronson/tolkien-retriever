@@ -3,7 +3,7 @@ from typing import Optional
 
 
 @dataclass
-class AuthenticatedUser:
+class User:
     uid: str
     email: Optional[str] = None
     email_verified: bool = False

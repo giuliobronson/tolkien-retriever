@@ -8,6 +8,7 @@ from infra.adapters.repositories.rulebook.mongodb_rulebook_repository import (
 from infra.adapters.repositories.session_repository.mongodb_session_repository import (
     MongoDBSessionRepository,
 )
+from infra.adapters.repositories.user_repository import MongoDBUserRepository
 
 
 async def get_mongodb_client():
@@ -31,4 +32,12 @@ async def get_rulebook_repository(
 ):
     db = client[MONGODB_DATABASE]
     repository = MongoDBRulebookRepository(db)
+    yield repository
+
+
+async def get_user_repository(
+    client: AsyncIOMotorClient = Depends(get_mongodb_client),
+):
+    db = client[MONGODB_DATABASE]
+    repository = MongoDBUserRepository(db)
     yield repository

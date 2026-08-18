@@ -5,8 +5,8 @@ from fastapi.testclient import TestClient
 
 from core.application.services.chat_service import ChatService
 from core.application.services.session_service import SessionService
-from core.domain.entities.authenticated_user import AuthenticatedUser
 from core.domain.entities.session import Session
+from core.domain.entities.user import User
 from core.domain.exceptions.expired_token_error import ExpiredTokenError
 from core.domain.value_objects.message import Message
 from core.domain.value_objects.role import Role
@@ -81,9 +81,7 @@ class TestChatRouterAuth:
         chat_service: ChatService,
     ) -> None:
         mock_auth_service = MagicMock(spec=IAuthService)
-        mock_auth_service.verify_token = AsyncMock(
-            return_value=AuthenticatedUser(uid="abc123")
-        )
+        mock_auth_service.verify_token = AsyncMock(return_value=User(uid="abc123"))
         app.dependency_overrides[get_auth_service] = lambda: mock_auth_service
         app.dependency_overrides[get_session_service] = lambda: session_service
         app.dependency_overrides[get_chat_service] = lambda: chat_service
