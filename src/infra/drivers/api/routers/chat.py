@@ -5,7 +5,7 @@ from fastapi.responses import StreamingResponse
 
 from core.application.services.chat_service import ChatService
 from core.application.services.session_service import SessionService
-from core.domain.entities.authenticated_user import AuthenticatedUser
+from core.domain.entities.user import User
 from core.domain.value_objects.message import Message
 from core.domain.value_objects.role import Role
 from infra.drivers.api.dependencies.auth import get_current_user
@@ -23,7 +23,7 @@ router = APIRouter(prefix="/chat", tags=["chat"])
 async def handle_query(
     rulebook_id: str,
     body: MessageDTO,
-    current_user: AuthenticatedUser = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
     session_service: SessionService = Depends(get_session_service),
     chat_service: ChatService = Depends(get_chat_service),
 ):
@@ -38,7 +38,7 @@ async def handle_query(
 async def handle_query_stream(
     rulebook_id: str,
     body: MessageDTO,
-    current_user: AuthenticatedUser = Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
     session_service: SessionService = Depends(get_session_service),
     chat_service: ChatService = Depends(get_chat_service),
 ):

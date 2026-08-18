@@ -13,6 +13,7 @@ from config import (
 from infra.adapters.repositories.rulebook.mongodb_rulebook_repository import (
     MongoDBRulebookRepository,
 )
+from infra.adapters.repositories.user_repository import MongoDBUserRepository
 from infra.adapters.storage.minio_storage import MinIOStorage
 
 
@@ -44,6 +45,17 @@ async def rulebook_repository():
     client = AsyncIOMotorClient(MONGODB_URL)
     db = client[MONGODB_DATABASE]
     repo = MongoDBRulebookRepository(db)
+    await repo.collection.delete_many({})
+    yield repo
+    await repo.collection.delete_many({})
+    client.close()
+
+
+@pytest_asyncio.fixture(scope="function")
+async def user_repository():
+    client = AsyncIOMotorClient(MONGODB_URL)
+    db = client[MONGODB_DATABASE]
+    repo = MongoDBUserRepository(db)
     await repo.collection.delete_many({})
     yield repo
     await repo.collection.delete_many({})

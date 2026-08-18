@@ -4,7 +4,7 @@ from typing import Dict
 import firebase_admin
 from firebase_admin import auth, credentials
 
-from core.domain.entities.authenticated_user import AuthenticatedUser
+from core.domain.entities.user import User
 from core.domain.exceptions.expired_token_error import ExpiredTokenError
 from core.domain.exceptions.invalid_token_error import InvalidTokenError
 from core.domain.exceptions.revoked_token_error import RevokedTokenError
@@ -19,7 +19,7 @@ class FirebaseAuthService(IAuthService):
             cred = credentials.Certificate(credentials_path)
             self.app = firebase_admin.initialize_app(cred)
 
-    async def verify_token(self, token: str) -> AuthenticatedUser:
+    async def verify_token(self, token: str) -> User:
         try:
             decoded: Dict = await asyncio.to_thread(
                 auth.verify_id_token, token, app=self.app, check_revoked=True
@@ -33,7 +33,7 @@ class FirebaseAuthService(IAuthService):
         except auth.CertificateFetchError as e:
             raise InvalidTokenError("Não foi possível verificar o token") from e
 
-        return AuthenticatedUser(
+        return User(
             uid=decoded["uid"],
             email=decoded.get("email"),
             email_verified=decoded.get("email_verified", False),

@@ -3,7 +3,7 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 from fastapi.security import HTTPAuthorizationCredentials
 
-from core.domain.entities.authenticated_user import AuthenticatedUser
+from core.domain.entities.user import User
 from core.domain.exceptions.invalid_token_error import InvalidTokenError
 from core.domain.exceptions.missing_token_error import MissingTokenError
 from core.ports.auth.auth_service import IAuthService
@@ -13,13 +13,13 @@ from infra.drivers.api.dependencies.auth import get_current_user
 class TestGetCurrentUser:
 
     @pytest.fixture
-    def authenticated_user(self) -> AuthenticatedUser:
-        return AuthenticatedUser(
+    def authenticated_user(self) -> User:
+        return User(
             uid="abc123", email="frodo@shire.com", email_verified=True, name="Frodo"
         )
 
     @pytest.fixture
-    def auth_service(self, authenticated_user: AuthenticatedUser) -> IAuthService:
+    def auth_service(self, authenticated_user: User) -> IAuthService:
         mock = MagicMock(spec=IAuthService)
         mock.verify_token = AsyncMock(return_value=authenticated_user)
         return mock
@@ -35,7 +35,7 @@ class TestGetCurrentUser:
 
     @pytest.mark.asyncio
     async def test_valid_credentials_delegates_to_auth_service(
-        self, auth_service: IAuthService, authenticated_user: AuthenticatedUser
+        self, auth_service: IAuthService, authenticated_user: User
     ) -> None:
         credentials = HTTPAuthorizationCredentials(
             scheme="Bearer", credentials="valid-token"
