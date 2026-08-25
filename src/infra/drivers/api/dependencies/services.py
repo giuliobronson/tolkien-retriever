@@ -3,19 +3,16 @@ from fastapi import Depends
 from core.application.services.chat_service import ChatService
 from core.application.services.rulebook_service import RulebookService
 from core.application.services.session_service import SessionService
-from core.application.services.user_service import UserService
 from core.ports.llm.agent import IAgent
 from core.ports.pipeline.rulebook_pipeline import IRulebookPipeline
 from core.ports.repositories.rulebook_repository import IRulebookRepository
 from core.ports.repositories.session_repository import ISessionRepository
-from core.ports.repositories.user_repository import IUserRepository
 from core.ports.storage.file_storage import IFileStorage
 from infra.drivers.api.dependencies.agents import get_agent
 from infra.drivers.api.dependencies.pipeline import get_rulebook_pipeline
 from infra.drivers.api.dependencies.repositories import (
     get_rulebook_repository,
     get_session_repository,
-    get_user_repository,
 )
 from infra.drivers.api.dependencies.storage import get_file_storage
 
@@ -42,11 +39,4 @@ async def get_rulebook_service(
     repository: IRulebookRepository = Depends(get_rulebook_repository),
 ):
     service = RulebookService(storage, processer, repository)
-    yield service
-
-
-async def get_user_service(
-    repository: IUserRepository = Depends(get_user_repository),
-):
-    service = UserService(repository)
     yield service

@@ -102,3 +102,24 @@ class TestFirebaseAuthService:
         ):
             with pytest.raises(InvalidTokenError):
                 await service.verify_token("token")
+
+    @pytest.mark.asyncio
+    async def test_delete_user_calls_firebase_delete_user(
+        self, service: FirebaseAuthService
+    ) -> None:
+        with patch(
+            "infra.adapters.auth.firebase_auth_service.auth.delete_user"
+        ) as mock_delete:
+            await service.delete_user("abc123")
+
+        mock_delete.assert_called_once_with("abc123", app=service.app)
+
+    @pytest.mark.asyncio
+    async def test_delete_user_ignores_unknown_firebase_user(
+        self, service: FirebaseAuthService
+    ) -> None:
+        with patch(
+            "infra.adapters.auth.firebase_auth_service.auth.delete_user",
+            side_effect=firebase_auth.UserNotFoundError("not found"),
+        ):
+            await service.delete_user("abc123")

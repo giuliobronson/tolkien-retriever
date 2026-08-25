@@ -10,6 +10,8 @@ from core.domain.exceptions.rulebook_not_found_error import RulebookNotFoundErro
 from core.domain.exceptions.rulebook_not_processed import RulebookNotProcessed
 from core.domain.exceptions.rulebook_processing_failed import RulebookProcessingFailed
 from core.domain.exceptions.session_not_found_error import SessionNotFoundError
+from core.domain.exceptions.user_forbidden_error import UserForbiddenError
+from core.domain.exceptions.user_not_found_error import UserNotFoundError
 
 
 def exception_container(app: FastAPI) -> None:
@@ -84,4 +86,20 @@ def exception_container(app: FastAPI) -> None:
     ) -> JSONResponse:
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST, content={"message": str(exc)}
+        )
+
+    @app.exception_handler(UserNotFoundError)
+    async def user_not_found_handler(
+        request: Request, exc: UserNotFoundError
+    ) -> JSONResponse:
+        return JSONResponse(
+            status_code=status.HTTP_404_NOT_FOUND, content={"message": str(exc)}
+        )
+
+    @app.exception_handler(UserForbiddenError)
+    async def user_forbidden_handler(
+        request: Request, exc: UserForbiddenError
+    ) -> JSONResponse:
+        return JSONResponse(
+            status_code=status.HTTP_403_FORBIDDEN, content={"message": str(exc)}
         )

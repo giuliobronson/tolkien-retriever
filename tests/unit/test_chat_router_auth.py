@@ -12,12 +12,11 @@ from core.domain.exceptions.expired_token_error import ExpiredTokenError
 from core.domain.value_objects.message import Message
 from core.domain.value_objects.role import Role
 from core.ports.auth.auth_service import IAuthService
-from infra.drivers.api.dependencies.auth import get_auth_service
 from infra.drivers.api.dependencies.services import (
     get_chat_service,
     get_session_service,
-    get_user_service,
 )
+from infra.drivers.api.dependencies.user import get_auth_service, get_user_service
 from main import app
 
 

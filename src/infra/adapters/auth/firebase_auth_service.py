@@ -39,3 +39,9 @@ class FirebaseAuthService(IAuthService):
             email_verified=decoded.get("email_verified", False),
             name=decoded.get("name"),
         )
+
+    async def delete_user(self, uid: str) -> None:
+        try:
+            await asyncio.to_thread(auth.delete_user, uid, app=self.app)
+        except auth.UserNotFoundError:
+            pass

@@ -4,6 +4,8 @@ import pytest
 
 from core.application.services.user_service import UserService
 from core.domain.entities.user import User
+from core.domain.exceptions.user_not_found_error import UserNotFoundError
+from core.ports.auth.auth_service import IAuthService
 from core.ports.repositories.user_repository import IUserRepository
 
 
@@ -20,8 +22,16 @@ class TestUserService:
         return MagicMock(spec=IUserRepository)
 
     @pytest.fixture
-    def user_service(self, user_repository: IUserRepository) -> UserService:
-        return UserService(user_repository)
+    def auth_service(self) -> IAuthService:
+        mock = MagicMock(spec=IAuthService)
+        mock.delete_user = AsyncMock()
+        return mock
+
+    @pytest.fixture
+    def user_service(
+        self, user_repository: IUserRepository, auth_service: IAuthService
+    ) -> UserService:
+        return UserService(user_repository, auth_service)
 
     @pytest.mark.asyncio
     async def test_creates_user_when_not_found(
@@ -57,3 +67,36 @@ class TestUserService:
         user_repository.find_by_id.assert_awaited_once_with("abc123")  # type: ignore
         user_repository.save.assert_not_awaited()  # type: ignore
         assert result is existing_user
+
+    @pytest.mark.asyncio
+    async def test_deletes_existing_user(
+        self,
+        user_service: UserService,
+        user_repository: IUserRepository,
+        auth_service: IAuthService,
+        token_user: User,
+    ) -> None:
+        user_repository.find_by_id = AsyncMock(return_value=token_user)  # type: ignore
+        user_repository.delete = AsyncMock()  # type: ignore
+
+        await user_service.delete_account("abc123")
+
+        user_repository.find_by_id.assert_awaited_once_with("abc123")  # type: ignore
+        auth_service.delete_user.assert_awaited_once_with("abc123")  # type: ignore
+        user_repository.delete.assert_awaited_once_with("abc123")  # type: ignore
+
+    @pytest.mark.asyncio
+    async def test_raises_when_deleting_unknown_user(
+        self,
+        user_service: UserService,
+        user_repository: IUserRepository,
+        auth_service: IAuthService,
+    ) -> None:
+        user_repository.find_by_id = AsyncMock(return_value=None)  # type: ignore
+        user_repository.delete = AsyncMock()  # type: ignore
+
+        with pytest.raises(UserNotFoundError):
+            await user_service.delete_account("abc123")
+
+        auth_service.delete_user.assert_not_awaited()  # type: ignore
+        user_repository.delete.assert_not_awaited()  # type: ignore

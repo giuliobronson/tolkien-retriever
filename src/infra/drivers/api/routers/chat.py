@@ -8,11 +8,11 @@ from core.application.services.session_service import SessionService
 from core.domain.entities.user import User
 from core.domain.value_objects.message import Message
 from core.domain.value_objects.role import Role
-from infra.drivers.api.dependencies.auth import get_authenticated_user
 from infra.drivers.api.dependencies.services import (
     get_chat_service,
     get_session_service,
 )
+from infra.drivers.api.dependencies.user import get_authenticated_user
 from infra.drivers.api.dto.message_dto import MessageDTO
 from infra.mappers.message_mapper import MessageMapper
 

@@ -7,7 +7,7 @@ from core.domain.entities.user import User
 from core.domain.exceptions.invalid_token_error import InvalidTokenError
 from core.domain.exceptions.missing_token_error import MissingTokenError
 from core.ports.auth.auth_service import IAuthService
-from infra.drivers.api.dependencies.auth import get_current_user
+from infra.drivers.api.dependencies.user import get_current_user
 
 
 class TestGetCurrentUser:

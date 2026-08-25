@@ -4,7 +4,7 @@ import pytest
 
 from core.application.services.user_service import UserService
 from core.domain.entities.user import User
-from infra.drivers.api.dependencies.auth import get_authenticated_user
+from infra.drivers.api.dependencies.user import get_authenticated_user
 
 
 class TestGetAuthenticatedUser:
