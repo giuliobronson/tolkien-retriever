@@ -20,12 +20,23 @@ class MongoDBSessionRepository(ISessionRepository):
         doc = await self.collection.find_one({"id": id})
         return SessionMapper.from_document(doc)
 
-    async def find_by_rulebook_id(self, rulebook_id: str) -> Optional[Session]:
-        doc = await self.collection.find_one({"rulebook_id": rulebook_id})
+    async def find_by_rulebook_id_and_owner(
+        self, rulebook_id: str, owner_id: str
+    ) -> Optional[Session]:
+        doc = await self.collection.find_one(
+            {"rulebook_id": rulebook_id, "owner_id": owner_id}
+        )
         return SessionMapper.from_document(doc)
 
     async def find_all(self) -> List[Session]:
         cursor = self.collection.find({})
+        docs = await cursor.to_list(length=None)
+        return [
+            s for doc in docs if (s := SessionMapper.from_document(doc)) is not None
+        ]
+
+    async def find_all_by_owner_id(self, owner_id: str) -> List[Session]:
+        cursor = self.collection.find({"owner_id": owner_id})
         docs = await cursor.to_list(length=None)
         return [
             s for doc in docs if (s := SessionMapper.from_document(doc)) is not None

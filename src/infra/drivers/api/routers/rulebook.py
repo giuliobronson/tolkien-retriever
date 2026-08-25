@@ -9,7 +9,7 @@ from core.domain.exceptions.rulebook_not_found_error import RulebookNotFoundErro
 from core.ports.repositories.rulebook_repository import IRulebookRepository
 from infra.adapters.utils import calculate_file_hash
 from infra.drivers.api.dependencies.repositories import get_rulebook_repository
-from infra.drivers.api.dependencies.services import get_rulebook_service
+from infra.drivers.api.dependencies.rulebook import get_rulebook_service
 from infra.drivers.api.dto.rulebook_dto import RulebookRequestDTO, RulebookResponseDTO
 from infra.mappers.rulebook_mapper import RulebookMapper
 

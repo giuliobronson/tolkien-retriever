@@ -9,8 +9,9 @@ from core.domain.value_objects.message import Message
 class Session:
     id: str
     rulebook_id: str
+    owner_id: str
     messages: List[Message] = field(default_factory=list)
 
     @classmethod
-    def create(cls, rulebook_id: str):
-        return cls(id=str(uuid4()), rulebook_id=rulebook_id)
+    def create(cls, rulebook_id: str, owner_id: str):
+        return cls(id=str(uuid4()), rulebook_id=rulebook_id, owner_id=owner_id)

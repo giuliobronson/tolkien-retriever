@@ -5,12 +5,12 @@ from fastapi.responses import StreamingResponse
 
 from core.application.services.chat_service import ChatService
 from core.application.services.session_service import SessionService
+from core.domain.entities.user import User
 from core.domain.value_objects.message import Message
 from core.domain.value_objects.role import Role
-from infra.drivers.api.dependencies.services import (
-    get_chat_service,
-    get_session_service,
-)
+from infra.drivers.api.dependencies.chat import get_chat_service
+from infra.drivers.api.dependencies.session import get_session_service
+from infra.drivers.api.dependencies.user import get_authenticated_user
 from infra.drivers.api.dto.message_dto import MessageDTO
 from infra.mappers.message_mapper import MessageMapper
 
@@ -21,10 +21,11 @@ router = APIRouter(prefix="/chat", tags=["chat"])
 async def handle_query(
     rulebook_id: str,
     body: MessageDTO,
+    current_user: User = Depends(get_authenticated_user),
     session_service: SessionService = Depends(get_session_service),
     chat_service: ChatService = Depends(get_chat_service),
 ):
-    session = await session_service.open_session(rulebook_id)
+    session = await session_service.open_session(rulebook_id, current_user.uid)
     chat_service.load_session(session)
     query = Message(role=Role.USER, content=body.content, timestamp=datetime.now())
     response = await chat_service.answer(query)
@@ -35,10 +36,11 @@ async def handle_query(
 async def handle_query_stream(
     rulebook_id: str,
     body: MessageDTO,
+    current_user: User = Depends(get_authenticated_user),
     session_service: SessionService = Depends(get_session_service),
     chat_service: ChatService = Depends(get_chat_service),
 ):
-    session = await session_service.open_session(rulebook_id)
+    session = await session_service.open_session(rulebook_id, current_user.uid)
     chat_service.load_session(session)
     query = Message(role=Role.USER, content=body.content, timestamp=datetime.now())
 
