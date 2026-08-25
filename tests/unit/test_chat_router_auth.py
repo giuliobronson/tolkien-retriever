@@ -5,6 +5,7 @@ from fastapi.testclient import TestClient
 
 from core.application.services.chat_service import ChatService
 from core.application.services.session_service import SessionService
+from core.application.services.user_service import UserService
 from core.domain.entities.session import Session
 from core.domain.entities.user import User
 from core.domain.exceptions.expired_token_error import ExpiredTokenError
@@ -15,6 +16,7 @@ from infra.drivers.api.dependencies.auth import get_auth_service
 from infra.drivers.api.dependencies.services import (
     get_chat_service,
     get_session_service,
+    get_user_service,
 )
 from main import app
 
@@ -49,6 +51,12 @@ class TestChatRouterAuth:
         )
         return mock
 
+    @pytest.fixture
+    def user_service(self) -> UserService:
+        mock = MagicMock(spec=UserService)
+        mock.get_or_create_user = AsyncMock(side_effect=lambda user: user)
+        return mock
+
     def test_missing_token_returns_401(self, client: TestClient) -> None:
         response = client.post(
             "/api/v1/chat/rulebook-1", json={"role": "user", "content": "oi"}
@@ -79,12 +87,14 @@ class TestChatRouterAuth:
         session: Session,
         session_service: SessionService,
         chat_service: ChatService,
+        user_service: UserService,
     ) -> None:
         mock_auth_service = MagicMock(spec=IAuthService)
         mock_auth_service.verify_token = AsyncMock(return_value=User(uid="abc123"))
         app.dependency_overrides[get_auth_service] = lambda: mock_auth_service
         app.dependency_overrides[get_session_service] = lambda: session_service
         app.dependency_overrides[get_chat_service] = lambda: chat_service
+        app.dependency_overrides[get_user_service] = lambda: user_service
 
         response = client.post(
             "/api/v1/chat/rulebook-1",
@@ -95,4 +105,5 @@ class TestChatRouterAuth:
         assert response.status_code == 200
         assert response.json()["content"] == "42"
         mock_auth_service.verify_token.assert_awaited_once_with("valid-token")
+        user_service.get_or_create_user.assert_awaited_once_with(User(uid="abc123"))  # type: ignore
         chat_service.load_session.assert_called_once_with(session)  # type: ignore
