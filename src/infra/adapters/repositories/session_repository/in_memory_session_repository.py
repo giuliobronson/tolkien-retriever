@@ -19,8 +19,20 @@ class InMemorySessionRepository(ISessionRepository):
     async def find_all(self) -> List[Session]:
         return list(self.db.values())
 
-    async def find_by_rulebook_id(self, rulebook_id: str) -> Optional[Session]:
-        return next((s for s in self.db.values() if s.rulebook_id == rulebook_id), None)
+    async def find_by_rulebook_id_and_owner(
+        self, rulebook_id: str, owner_id: str
+    ) -> Optional[Session]:
+        return next(
+            (
+                s
+                for s in self.db.values()
+                if s.rulebook_id == rulebook_id and s.owner_id == owner_id
+            ),
+            None,
+        )
+
+    async def find_all_by_owner_id(self, owner_id: str) -> List[Session]:
+        return [s for s in self.db.values() if s.owner_id == owner_id]
 
     async def update(self, id: str, entity: Session) -> Session:
         self.db[id] = entity

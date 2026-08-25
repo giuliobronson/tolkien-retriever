@@ -11,6 +11,7 @@ class SessionMapper:
         return {
             "id": session.id,
             "rulebook_id": session.rulebook_id,
+            "owner_id": session.owner_id,
             "messages": [MessageMapper.to_document(m) for m in session.messages],
         }
 
@@ -21,6 +22,7 @@ class SessionMapper:
         return Session(
             id=doc["id"],
             rulebook_id=doc["rulebook_id"],
+            owner_id=doc["owner_id"],
             messages=[MessageMapper.from_document(m) for m in doc.get("messages", [])],
         )
 
@@ -29,6 +31,7 @@ class SessionMapper:
         return SessionDTO(
             id=session.id,
             rulebook_id=session.rulebook_id,
+            owner_id=session.owner_id,
             messages=[MessageMapper.to_dto(message) for message in session.messages],
         )
 
@@ -37,6 +40,7 @@ class SessionMapper:
         return Session(
             id=session_dto.id,
             rulebook_id=session_dto.rulebook_id,
+            owner_id=session_dto.owner_id,
             messages=[
                 MessageMapper.to_entity(message) for message in session_dto.messages
             ],

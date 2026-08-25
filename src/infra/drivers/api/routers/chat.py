@@ -25,7 +25,7 @@ async def handle_query(
     session_service: SessionService = Depends(get_session_service),
     chat_service: ChatService = Depends(get_chat_service),
 ):
-    session = await session_service.open_session(rulebook_id)
+    session = await session_service.open_session(rulebook_id, current_user.uid)
     chat_service.load_session(session)
     query = Message(role=Role.USER, content=body.content, timestamp=datetime.now())
     response = await chat_service.answer(query)
@@ -40,7 +40,7 @@ async def handle_query_stream(
     session_service: SessionService = Depends(get_session_service),
     chat_service: ChatService = Depends(get_chat_service),
 ):
-    session = await session_service.open_session(rulebook_id)
+    session = await session_service.open_session(rulebook_id, current_user.uid)
     chat_service.load_session(session)
     query = Message(role=Role.USER, content=body.content, timestamp=datetime.now())
 

@@ -15,16 +15,18 @@ class SessionService:
         self.session_repository = session_repository
         self.rulebook_repository = rulebook_repository
 
-    async def get_rulebooks_from_sessions(self) -> List[Rulebook]:
-        sessions = await self.session_repository.find_all()
+    async def get_rulebooks_from_sessions(self, owner_id: str) -> List[Rulebook]:
+        sessions = await self.session_repository.find_all_by_owner_id(owner_id)
         rulebook_ids = list({session.rulebook_id for session in sessions})
         return await self.rulebook_repository.find_by_ids(rulebook_ids)
 
-    async def create_session(self, rulebook_id: str) -> Session:
-        return await self.session_repository.save(Session.create(rulebook_id))
+    async def create_session(self, rulebook_id: str, owner_id: str) -> Session:
+        return await self.session_repository.save(Session.create(rulebook_id, owner_id))
 
-    async def open_session(self, rulebook_id: str) -> Session:
-        session = await self.session_repository.find_by_rulebook_id(rulebook_id)
+    async def open_session(self, rulebook_id: str, owner_id: str) -> Session:
+        session = await self.session_repository.find_by_rulebook_id_and_owner(
+            rulebook_id, owner_id
+        )
         if session:
             return session
-        return await self.create_session(rulebook_id)
+        return await self.create_session(rulebook_id, owner_id)

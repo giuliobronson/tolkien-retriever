@@ -31,7 +31,9 @@ class TestChatRouterAuth:
 
     @pytest.fixture
     def session(self) -> Session:
-        return Session(id="session-1", rulebook_id="rulebook-1", messages=[])
+        return Session(
+            id="session-1", rulebook_id="rulebook-1", owner_id="abc123", messages=[]
+        )
 
     @pytest.fixture
     def session_service(self, session: Session) -> SessionService:
@@ -103,4 +105,5 @@ class TestChatRouterAuth:
         assert response.json()["content"] == "42"
         mock_auth_service.verify_token.assert_awaited_once_with("valid-token")
         user_service.get_or_create_user.assert_awaited_once_with(User(uid="abc123"))  # type: ignore
+        session_service.open_session.assert_awaited_once_with("rulebook-1", "abc123")  # type: ignore
         chat_service.load_session.assert_called_once_with(session)  # type: ignore
