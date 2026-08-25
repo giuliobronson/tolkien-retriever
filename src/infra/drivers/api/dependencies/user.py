@@ -1,3 +1,4 @@
+# Feature module: only imports leaf modules (repositories/storage/pipeline/agents) — never another feature module in dependencies/.
 from functools import lru_cache
 
 from fastapi import Depends

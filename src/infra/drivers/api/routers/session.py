@@ -6,7 +6,7 @@ from core.application.services.session_service import SessionService
 from core.domain.exceptions.session_not_found_error import SessionNotFoundError
 from core.ports.repositories.session_repository import ISessionRepository
 from infra.drivers.api.dependencies.repositories import get_session_repository
-from infra.drivers.api.dependencies.services import get_session_service
+from infra.drivers.api.dependencies.session import get_session_service
 from infra.drivers.api.dto.message_dto import MessageDTO
 from infra.drivers.api.dto.rulebook_dto import RulebookResponseDTO
 from infra.mappers.message_mapper import MessageMapper
