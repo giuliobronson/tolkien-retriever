@@ -1,0 +1,37 @@
+# Version control / CI
+.git
+.github
+.gitignore
+
+# Local envs & secrets — provide these at runtime, never bake them in
+.env
+.env.*
+!.env.example
+secrets/
+venv/
+.venv/
+
+# Python caches / build artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+.coverage.*
+
+# Tests & tooling not needed in the image
+tests/
+.pre-commit-config.yaml
+.vscode/
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Docs
+*.md
+!README.md
