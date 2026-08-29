@@ -1,3 +1,5 @@
+[![CI](https://github.com/giuliobronson/tolkien-retriever/actions/workflows/ci.yml/badge.svg)](https://github.com/giuliobronson/tolkien-retriever/actions/workflows/ci.yml)
+
 # tolkien-retriever
 
 Backend API para processamento de manuais de jogos de tabuleiro e chat com suporte a RAG.
@@ -49,23 +51,4 @@ uv run pre-commit run --all-files
 
 ```bash
 uv run uvicorn main:app --app-dir src --reload --host 127.0.0.1 --port 8001
-```
-
-## Docker
-
-Stack completa (API + MinIO + MongoDB + Qdrant):
-
-```bash
-docker compose up -d --build
-```
-
-A API sobe em `http://localhost:8001`. O serviço `api` lê o `.env` (`env_file`) e
-monta `./secrets` em `/app/secrets` para o JSON do Firebase — nada é embutido na
-imagem; as URLs de MongoDB/MinIO/Qdrant são sobrescritas para os nomes de serviço
-do compose.
-
-Só a imagem:
-
-```bash
-docker build -t tolkien-retriever .
 ```
