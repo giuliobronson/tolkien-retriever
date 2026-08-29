@@ -42,7 +42,10 @@ services:
         volumes:
             - qdrant_data:/qdrant/storage
         healthcheck:
-            disable: true
+            test: ["CMD-SHELL", "bash -c ':> /dev/tcp/127.0.0.1/6333' || exit 1"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
 
 volumes:
     minio_data:

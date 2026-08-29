@@ -38,10 +38,6 @@ dev = [
 ]
 
 [tool.uv]
-# langgraph-prebuilt doesn't declare its langgraph lower bound, so a fresh
-# resolve pulls 1.0.13, which imports symbols absent from the pinned
-# langgraph 1.0.2 (ImportError: ExecutionInfo). Hold it at the known-good
-# version until langgraph itself is bumped.
 constraint-dependencies = ["langgraph-prebuilt==1.0.8"]
 
 [tool.setuptools]
