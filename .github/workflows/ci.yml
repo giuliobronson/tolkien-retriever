@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  push:
+    branches: [master, development]
+  pull_request:
+    branches: [master, development]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  # Fixa a versão do Python em todos os jobs (o .venv de dev usa 3.12).
+  UV_PYTHON: "3.12"
+  # Falha se o uv.lock estiver dessincronizado do pyproject.toml.
+  UV_FROZEN: "1"
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # 1) Lint / formatação
+  # ---------------------------------------------------------------------------
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Instalar uv (com cache de ~/.cache/uv)
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Sincronizar dependências
+        run: uv sync --no-install-project
+
+      - name: black (somente checagem)
+        run: uv run --no-sync black --check --diff .
+
+      - name: isort (somente checagem)
+        run: uv run --no-sync isort --check-only --diff .
+
+  # ---------------------------------------------------------------------------
+  # 2) Testes unitários
+  # ---------------------------------------------------------------------------
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Instalar uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Sincronizar dependências
+        run: uv sync --no-install-project
+
+      - name: pytest (unit)
+        run: uv run --no-sync pytest tests/unit -q
+
+  # ---------------------------------------------------------------------------
+  # 3) Testes de integração
+  # ---------------------------------------------------------------------------
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Subir infra (MongoDB, MinIO, Qdrant)
+        run: docker compose up -d --wait minio mongo qdrant
+
+      - name: Instalar uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Sincronizar dependências
+        run: uv sync --no-install-project
+
+      - name: pytest (integration)
+        run: uv run --no-sync pytest tests/integration -q
+
+      - name: Logs da infra em caso de falha
+        if: failure()
+        run: docker compose logs
