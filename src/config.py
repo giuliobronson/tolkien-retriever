@@ -24,6 +24,7 @@ MINIO_BUCKET_DOCUMENTS = os.getenv("MINIO_BUCKET_DOCUMENTS", "rulebooks")
 
 # Qdrant
 QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
+QDRANT_API_KEY = os.getenv("QDRANT_API_KEY", "")
 RULEBOOK_COLLETION = os.getenv("RULEBOOK_COLLETION", "rulebooks")
 
 # OpenAI
