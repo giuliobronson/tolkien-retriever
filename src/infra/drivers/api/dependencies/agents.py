@@ -4,7 +4,13 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_qdrant import QdrantVectorStore
 from qdrant_client import QdrantClient
 
-from config import EMBEDDING_MODEL, OPENAI_API_KEY, QDRANT_URL, RULEBOOK_COLLETION
+from config import (
+    EMBEDDING_MODEL,
+    OPENAI_API_KEY,
+    QDRANT_API_KEY,
+    QDRANT_URL,
+    RULEBOOK_COLLETION,
+)
 from core.ports.repositories.rulebook_repository import IRulebookRepository
 from infra.adapters.llm.factories.rules_agent_factory import RulesAgentFactory
 from infra.drivers.api.dependencies.repositories import get_rulebook_repository
@@ -20,7 +26,7 @@ async def get_agent(
 
     embeddings = OpenAIEmbeddings(model=EMBEDDING_MODEL)
     vector_store = QdrantVectorStore(
-        client=QdrantClient(url=QDRANT_URL),
+        client=QdrantClient(url=QDRANT_URL, api_key=QDRANT_API_KEY or None),
         collection_name=RULEBOOK_COLLETION,
         embedding=embeddings,
     )
