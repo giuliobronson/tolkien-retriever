@@ -103,6 +103,42 @@ class TestFirebaseAuthService:
             with pytest.raises(InvalidTokenError):
                 await service.verify_token("token")
 
+    def test_init_uses_certificate_when_path_given(self) -> None:
+        with (
+            patch(
+                "infra.adapters.auth.firebase_auth_service.firebase_admin.get_app",
+                side_effect=ValueError,
+            ),
+            patch(
+                "infra.adapters.auth.firebase_auth_service.credentials.Certificate"
+            ) as mock_cert,
+            patch(
+                "infra.adapters.auth.firebase_auth_service.firebase_admin.initialize_app"
+            ) as mock_init,
+        ):
+            FirebaseAuthService(credentials_path="creds.json")
+
+        mock_cert.assert_called_once_with("creds.json")
+        mock_init.assert_called_once_with(mock_cert.return_value)
+
+    def test_init_falls_back_to_adc_without_path(self) -> None:
+        with (
+            patch(
+                "infra.adapters.auth.firebase_auth_service.firebase_admin.get_app",
+                side_effect=ValueError,
+            ),
+            patch(
+                "infra.adapters.auth.firebase_auth_service.credentials.Certificate"
+            ) as mock_cert,
+            patch(
+                "infra.adapters.auth.firebase_auth_service.firebase_admin.initialize_app"
+            ) as mock_init,
+        ):
+            FirebaseAuthService()
+
+        mock_cert.assert_not_called()
+        mock_init.assert_called_once_with(None)
+
     @pytest.mark.asyncio
     async def test_delete_user_calls_firebase_delete_user(
         self, service: FirebaseAuthService

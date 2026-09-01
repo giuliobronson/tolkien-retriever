@@ -12,11 +12,13 @@ from core.ports.auth.auth_service import IAuthService
 
 
 class FirebaseAuthService(IAuthService):
-    def __init__(self, credentials_path: str):
+    def __init__(self, credentials_path: str = ""):
         try:
             self.app = firebase_admin.get_app()
         except ValueError:
-            cred = credentials.Certificate(credentials_path)
+            cred = (
+                credentials.Certificate(credentials_path) if credentials_path else None
+            )
             self.app = firebase_admin.initialize_app(cred)
 
     async def verify_token(self, token: str) -> User:
